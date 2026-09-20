@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Execution Protocol | AceGenie Theme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --paper: #f4f2ed;
+    --paper-raised: #fbfaf7;
+    --paper-band: #efede7;
+    --ink: #131417;
+    --cobalt: #3346f5;
+    --cobalt-mid: #b6c2f6;
+    --lime: #d6ff3d;
+    --line: #e3e0d9;
+    --line-soft: #efede7;
+    --dash: #c9c5bb;
+    --shell: #e0ddd5;
+    --muted: #4a4e58;
+    --muted-2: #6b6f7a;
+    --muted-3: #8a8f9a;
+    --red: #e70044; 
+    --green: #00a544;
+    --orange: #ff8b1a;
+
+    --shadow-sm: 0 4px 12px -2px rgba(19, 20, 23, 0.06);
+    --shadow: 0 18px 36px -14px rgba(19, 20, 23, 0.1);
+    --shadow-lg: 0 34px 60px -40px rgba(19, 20, 23, 0.3);
+    
+    --radius: 24px;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --display: "Anton", sans-serif;
+    --hand: "Caveat", cursive;
+}
+
+* { box-sizing: border-box; scroll-behavior: smooth; }
+html, body {
+    margin: 0; width: 100%; min-height: 100%;
+    background-color: var(--paper); color: var(--ink); font-family: var(--sans);
+    background-image: linear-gradient(rgba(19, 20, 23, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(19, 20, 23, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px; -webkit-font-smoothing: antialiased;
+}
+body { overflow-x: hidden; }
+button, input, textarea { font: inherit; outline: none; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { box-shadow: 0 0 0 3px rgba(51, 70, 245, 0.25); }
+
+.app { width: 100%; padding: 32px clamp(16px, 4vw, 40px) 64px; }
+.shell { max-width: 1300px; margin: 0 auto; }
+
+/* Topbar & Navigation */
+.topbar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center;
+    padding: 16px 24px; background: rgba(255, 255, 255, 0.9); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow-sm); backdrop-filter: blur(14px);
+    position: sticky; top: 16px; z-index: 100;
+}
+.brand-row { display: flex; align-items: center; gap: 16px; }
+.brand-logo { display: flex; align-items: center; font-family: var(--sans); font-weight: 800; font-size: 26px; letter-spacing: -0.03em; margin-right: 8px; flex: none; }
+.brand-logo svg { width: 28px; height: 28px; margin-right: 6px; fill: var(--cobalt); }
+.brand-logo .text-ink { color: var(--ink); }
+.brand-logo .text-cobalt { color: var(--cobalt); }
+.brand-title { font-family: var(--display); font-size: 28px; letter-spacing: 0.01em; text-transform: uppercase; line-height: 0.95; }
+.brand-sub { font-size: 11px; color: var(--muted-2); margin-top: 6px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 800; }
+
+.view-tabs { display: flex; background: var(--paper-band); padding: 4px; border-radius: 12px; gap: 4px; }
+.tab-btn { background: transparent; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--muted-2); transition: 0.2s; }
+.tab-btn.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
+
+.utility-wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.sync-status { display: flex; flex-direction: column; align-items: flex-end; }
+.sync-badge { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; transition: 0.3s; }
+.sync-dot.synced { background: var(--green); box-shadow: 0 0 0 3px rgba(0, 165, 68, 0.15); }
+.sync-dot.local_saved { background: var(--cobalt); box-shadow: 0 0 0 3px rgba(51, 70, 245, 0.15); }
+.sync-dot.saving { background: var(--orange); box-shadow: 0 0 0 3px rgba(255, 139, 26, 0.15); animation: pulse 1s infinite; }
+.sync-dot.offline { background: var(--muted-3); }
+.sync-dot.error { background: var(--red); }
+.sync-time { font-size: 11px; color: var(--muted-2); margin-top: 4px; font-weight: 600; }
+
+.action-btn { background: var(--ink); color: #fff; border: 1px solid var(--ink); border-radius: 999px; padding: 10px 20px; font-size: 13px; font-weight: 800; transition: 0.2s; white-space: nowrap; }
+.action-btn:hover { background: var(--cobalt); border-color: var(--cobalt); }
+.action-btn.secondary { background: #fff; color: var(--ink); border-color: var(--line); }
+.action-btn.secondary:hover { border-color: var(--cobalt); color: var(--cobalt); }
+
+@keyframes pulse { 50% { transform: scale(0.85); opacity: 0.6; } }
+
+/* Utility Grid */
+.utility-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin: 28px 0; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 28px; }
+.remaining-card, .countdown-card {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+}
+.card-inner { padding: 28px; height: 100%; display: flex; flex-direction: column; }
+.card-label { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-soft); padding-bottom: 16px; margin-bottom: 20px; }
+.card-label span:first-child { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 800; color: var(--muted-3); }
+.today-tag { font-family: var(--sans); font-weight: 800; font-size: 10.5px; color: var(--cobalt); background: rgba(51, 70, 245, 0.08); padding: 4px 12px; border-radius: 999px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.big-metric { font-family: var(--display); font-size: 64px; letter-spacing: -0.01em; line-height: 0.95; color: var(--ink); text-transform: uppercase; }
+.big-metric.blue { color: var(--cobalt); }
+.metric-unit { font-family: var(--sans); font-size: 14px; font-weight: 800; color: var(--muted-3); margin-left: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
+.eyebrow { font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); font-weight: 800; margin-top: 8px; }
+
+.countdown-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 10px; }
+.next-name { font-family: var(--display); font-size: 36px; color: var(--ink); letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 0.95; text-transform: uppercase; }
+.next-date { font-family: var(--sans); font-weight: 800; font-size: 12px; color: var(--muted-2); margin-top: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+.days { font-family: var(--display); font-size: 64px; color: var(--cobalt); white-space: nowrap; line-height: 0.95; }
+.days.today { color: var(--red); }
+
+.targets { display: flex; justify-content: space-around; gap: 20px; padding: 20px 24px; border: 1px solid var(--line); border-radius: 20px; background: var(--paper-raised); flex: 1; }
+.target-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+.target-label { font-size: 10.5px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800; }
+.target-item .big-metric { font-size: 56px; color: var(--ink); }
+
+.quote-box {
+    margin-top: 20px; background: var(--paper-raised); border: 1px dashed var(--dash); border-radius: 20px; padding: 16px 20px; flex: 1; display: flex; flex-direction: column;
+}
+.quote-input {
+    width: 100%; min-height: 60px; background: transparent; border: none; font-family: var(--hand); font-size: 24px; color: var(--ink); resize: none; text-align: center; line-height: 1.3; overflow: hidden; transition: 0.2s;
+}
+.quote-input:focus { outline: none; color: var(--cobalt); }
+.quote-input::placeholder { color: var(--muted-3); opacity: 0.7; }
+
+.weekly-progress-inline { margin-top: 20px; padding: 24px; border: 1px solid var(--line); border-radius: 20px; background: var(--paper-raised); }
+.weekly-inline-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.weekly-inline-week { margin-top: 8px; color: var(--muted-2); font-family: var(--sans); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.weekly-inline-value { font-family: var(--display); font-size: 32px; color: var(--green); white-space: nowrap; line-height: 1; text-transform: uppercase; }
+.weekly-progress-inline .week-progress { margin-top: 16px; height: 10px; background: var(--shell); border-radius: 999px; overflow: hidden; }
+.weekly-progress-inline .week-progress > span { display: block; height: 100%; width: 0; background: var(--green); border-radius: inherit; transition: width 0.3s cubic-bezier(0.2, 0.7, 0.3, 1); }
+
+/* Protocol View (Table) */
+.table-wrap { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; overflow: hidden; box-shadow: var(--shadow-sm); }
+.table-scroll { width: 100%; overflow: auto; }
+table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; min-width: 1000px; }
+col.date { width: 11%; } col.schedule { width: 25%; } col.todo { width: 40%; } col.w6 { width: 12%; }
+
+thead th {
+    position: sticky; top: 0; z-index: 10; background: var(--paper-band); color: var(--muted-2); font-size: 9.5px;
+    letter-spacing: 0.14em; text-transform: uppercase; font-weight: 800; padding: 16px 12px; border-bottom: 1px solid var(--line); text-align: left;
+}
+thead th+th { border-left: 1px solid var(--line-soft); }
+.th-stack { display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+.mini-target { width: 60px; border: 1px solid var(--dash); border-radius: 8px; padding: 6px; font-family: var(--mono); font-weight: 600; font-size: 12px; text-align: center; display: block; margin: 4px auto 0; transition: 0.2s; }
+.mini-target:focus { border-color: var(--cobalt); }
+
+tbody.week-body { display: table-row-group; }
+.day-row td { padding: 16px 14px; border-bottom: 1px solid var(--line); vertical-align: top; background: #fff; }
+.day-row td+td { border-left: 1px solid var(--line-soft); }
+.day-row.weekend td { background: var(--paper-raised); }
+.day-row.today td { background: rgba(51, 70, 245, 0.03); }
+.day-row.today td:first-child { border-left: 4px solid var(--cobalt); padding-left: 10px; }
+.day-row:last-child td { border-bottom: 0; }
+
+.date-box { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.date-line { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.date-main { font-family: var(--display); font-size: 26px; color: var(--ink); text-transform: uppercase; letter-spacing: 0.02em; line-height: 1; }
+.date-weekday { font-size: 10.5px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 800; margin-top: 2px; }
+.day-row.today .date-main { color: var(--cobalt); }
+
+.small-note { font-size: 9.5px; font-weight: 800; color: var(--muted-3); text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.4; margin-top: 6px; }
+.countdown-card .small-note, .todo-empty {
+    font-family: var(--hand); font-size: 19px; color: var(--muted-2); font-weight: 600; text-transform: none; letter-spacing: normal; margin-top: 12px;
+}
+
+.test-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.test-item { padding: 16px; border-radius: 16px; background: #fff; border: 1px solid var(--line); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.pill-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.test-pill {
+    display: inline-flex; align-items: center; min-height: 24px; padding: 4px 12px; border-radius: 999px; font-family: var(--sans); font-weight: 800; font-size: 10px;
+    border: 1px solid var(--dash); background: var(--paper-raised); color: var(--ink); white-space: nowrap; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.test-pill.qapt { background: var(--cobalt); color: #fff; border-color: var(--cobalt); }
+.test-pill.qft { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.test-pill.main { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.syllabus-caption { font-size: 9.5px; letter-spacing: 0.14em; color: var(--muted-3); text-transform: uppercase; font-weight: 800; margin-top: 12px; margin-bottom: 8px; }
+
+.missions { display: flex; flex-direction: column; gap: 8px; }
+.mission { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+
+.tiny-check, .todo-check {
+    appearance: none; -webkit-appearance: none; cursor: pointer; flex: none; background: #fff; border: 2px solid var(--dash); transition: 0.2s; display: grid; place-items: center; margin-top: 1px;
+}
+.tiny-check { width: 16px; height: 16px; border-radius: 5px; }
+.todo-check { width: 20px; height: 20px; border-radius: 50%; }
+.tiny-check:checked, .todo-check:checked { background: var(--cobalt); border-color: var(--cobalt); }
+.tiny-check:checked::after, .todo-check:checked::after {
+    content: ""; width: 5px; height: 9px; border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(45deg) translateY(-1px);
+}
+
+.priority-wrap { padding-top: 8px; }
+.priority-label { font-size: 10.5px; color: var(--muted-3); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 800; margin-bottom: 12px; }
+
+.todo-composer { display: grid; grid-template-columns: minmax(0, 1fr) 36px; gap: 10px; align-items: start; margin-bottom: 12px; }
+.autoarea, .cell-area, .todo-input {
+    width: 100%; min-width: 0; resize: none; overflow: hidden; display: block; border: 1px solid transparent; background: transparent;
+    color: var(--ink); padding: 10px 12px; border-radius: 12px; line-height: 1.5; font-size: 13px; font-weight: 600; font-family: var(--sans); transition: 0.2s;
+}
+.diary-area { background: var(--paper-raised); border-color: var(--line); min-height: 70px; font-weight: 500; font-size: 12.5px; }
+.todo-input { background: #fff; border-color: var(--dash); min-height: 36px; font-size: 12.5px; flex: 1; }
+.autoarea:hover, .cell-area:hover, .todo-input:hover { border-color: var(--dash); }
+.diary-area:focus, .todo-input:focus, .cell-area:focus { background: #fff; border-color: var(--cobalt); box-shadow: 0 0 0 3px rgba(51, 70, 245, 0.15); outline: none; }
+
+.todo-add {
+    width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper-band); color: var(--ink); cursor: pointer; font-size: 22px; line-height: 1; padding: 0; transition: 0.2s; display: grid; place-items: center;
+}
+.todo-add:hover { background: var(--cobalt); color: #fff; border-color: var(--cobalt); }
+
+.todo-list { display: flex; flex-direction: column; gap: 8px; }
+.todo-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper-raised); box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: 0.2s; }
+.todo-row.done { opacity: 0.65; background: var(--paper-band); border-color: var(--dash); }
+.todo-row.done .todo-text { text-decoration: line-through; color: var(--muted-2); }
+.todo-content { min-width: 0; flex: 1; margin-top: 1px; }
+.todo-text { font-size: 13px; line-height: 1.45; word-break: break-word; font-weight: 600; color: var(--ink); }
+.todo-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 8px; font-family: var(--sans); font-weight: 800; font-size: 9.5px; letter-spacing: 0.08em; border: 1px solid transparent; text-transform: uppercase; }
+.tag.phy { background: var(--cobalt); color: #fff; border-color: var(--cobalt); }
+.tag.chem { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.tag.math { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.tag.other { background: var(--shell); color: var(--muted); border-color: var(--dash); }
+
+.todo-delete { border: 0; background: transparent; color: var(--muted-3); font-size: 20px; line-height: 1; padding: 0; cursor: pointer; transition: 0.2s; margin-top: -2px; }
+.todo-delete:hover { color: var(--red); }
+.todo-empty { margin: 8px 0 4px; }
+
+.countdown-missions { margin-top: 24px; padding-top: 24px; border-top: 1px dashed var(--line); max-height: 280px; overflow: auto; }
+.countdown-test + .countdown-test { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+.countdown-test-name { font-family: var(--sans); font-weight: 800; font-size: 11.5px; color: var(--ink); margin-bottom: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.countdown-mission-list { display: flex; flex-direction: column; gap: 8px; }
+.mission.countdown { font-size: 13px !important; color: var(--muted); }
+
+thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: center; }
+.numeric-cell { padding-left: 10px !important; padding-right: 10px !important; }
+.numeric-input { 
+    width: 100%; max-width: 100%; box-sizing: border-box; min-width: 0; text-align: center; font-family: var(--mono); 
+    font-size: 16px; font-weight: 700; border: 1px solid transparent; background: transparent; padding: 10px 4px; border-radius: 8px; transition: 0.2s; 
+}
+.numeric-input:hover { border-color: var(--line); background: var(--paper-raised); }
+.numeric-input:focus { background: #fff; border-color: var(--cobalt); box-shadow: 0 0 0 3px rgba(51, 70, 245, 0.15); }
+
+.numeric-cell .progress { width: 100%; margin-top: 12px; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.numeric-cell .progress > span { display: block; height: 100%; width: 0; background: var(--green); border-radius: inherit; transition: width 0.3s cubic-bezier(0.2, 0.7, 0.3, 1); }
+.numeric-cell .progress.blue > span { background: var(--cobalt); }
+.numeric-cell .metric-read { font-family: var(--sans); font-weight: 800; font-size: 11px; color: var(--muted-2); margin-top: 8px; text-align: center; letter-spacing: 0.05em; }
+
+.pagination-wrap { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 40px 0 20px; }
+.page-btn {
+    width: 44px; height: 44px; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 12px; cursor: pointer; font-family: var(--mono); font-weight: 600; font-size: 14px; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+.page-btn:hover:not(.active):not(:disabled) { background: var(--paper-raised); border-color: var(--cobalt); color: var(--cobalt); }
+.page-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-arrow { width: 52px; font-size: 20px; font-family: var(--sans); }
+
+/* Calendar View */
+#view-calendar { display: none; margin-top: 28px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-sm); }
+.cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.cal-title { font-family: var(--display); font-size: 36px; text-transform: uppercase; letter-spacing: 0.02em; }
+.cal-nav { display: flex; gap: 8px; }
+.cal-nav button { padding: 8px 16px; border: 1px solid var(--line); background: var(--paper-raised); border-radius: 8px; font-weight: 700; font-size: 13px; transition: 0.2s; }
+.cal-nav button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.cal-nav button:hover:not(.active) { border-color: var(--cobalt); color: var(--cobalt); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.cal-day-head { text-align: right; padding: 8px; font-weight: 800; font-size: 11px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.1em; }
+.cal-cell { min-height: 120px; border: 1px solid var(--line-soft); border-radius: 12px; padding: 8px; background: var(--paper-raised); cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 6px; }
+.cal-cell:hover { border-color: var(--cobalt); box-shadow: 0 4px 12px rgba(51,70,245,0.1); }
+.cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+.cal-cell.today { border-color: var(--cobalt); background: rgba(51,70,245,0.03); }
+.cal-date-num { font-family: var(--mono); font-weight: 700; font-size: 14px; color: var(--muted); text-align: right; margin-bottom: 4px; }
+.cal-cell.today .cal-date-num { color: var(--cobalt); background: var(--cobalt-mid); color: #fff; display: inline-block; width: 24px; height: 24px; text-align: center; line-height: 24px; border-radius: 50%; align-self: flex-end; }
+
+/* Calendar Event Pills */
+.cal-event-test { background: var(--cobalt); color: #fff; font-size: 10px; font-weight: 800; padding: 5px 8px; border-radius: 6px; text-transform: uppercase; white-space: normal; word-break: break-word; text-align: left; line-height: 1.3; letter-spacing: 0.05em; height: auto; }
+.cal-event-todo { background: var(--shell); color: var(--ink); font-size: 10px; font-weight: 700; padding: 5px 8px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
+.cal-event-todo::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--dash); flex: none; }
+.cal-event-todo.done::before { background: var(--green); }
+.cal-event-todo.done { opacity: 0.6; text-decoration: line-through; }
+
+/* Agenda View */
+#cal-agenda-view { display: none; flex-direction: column; gap: 16px; max-width: 800px; margin: 0 auto; }
+.agenda-day { display: grid; grid-template-columns: 120px 1fr; gap: 24px; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.agenda-date { font-family: var(--display); font-size: 24px; color: var(--ink); line-height: 1; text-transform: uppercase; }
+.agenda-weekday { font-size: 11px; color: var(--muted-2); font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.agenda-events { display: flex; flex-direction: column; gap: 8px; }
+.agenda-events .cal-event-test { white-space: normal; word-break: break-word; text-align: left; line-height: 1.4; padding: 8px 12px; height: auto; }
+
+/* Modals & Flash */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; display: none; place-items: center; padding: 20px; }
+.modal { background: #fff; width: 100%; max-width: 440px; border-radius: 24px; padding: 32px; box-shadow: var(--shadow-lg); }
+.modal h3 { font-family: var(--display); font-size: 32px; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 0.02em; }
+.modal p { font-size: 14px; color: var(--muted); margin: 0 0 24px 0; line-height: 1.5; font-weight: 500; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+.flash { position: fixed; right: 28px; bottom: 28px; z-index: 50; padding: 14px 28px; border-radius: 100px; background: var(--ink); color: #fff; box-shadow: var(--shadow-lg); font-size: 14px; font-weight: 700; opacity: 0; transform: translateY(16px); pointer-events: none; transition: 0.3s; }
+.flash.error { background: var(--red); }
+.flash.show { opacity: 1; transform: none; }
+
+.footer-note { margin-top: 20px; color: var(--muted-3); font-size: 12px; font-weight: 700; text-align: center; letter-spacing: 0.05em; }
+
+@media (max-width: 1250px) {
+    .topbar { grid-template-columns: 1fr; position: static; }
+    .utility-wrap { justify-content: space-between; }
+}
+@media (max-width: 900px) {
+    .app { padding: 20px 16px 40px; }
+    .utility-grid { grid-template-columns: 1fr; gap: 20px; }
+    .countdown-missions { max-height: 240px; }
+    .cal-grid { display: flex; flex-direction: column; gap: 12px; }
+    .cal-day-head { display: none; }
+    .cal-cell { min-height: auto; border: 1px solid var(--line); }
+    .cal-cell.empty { display: none; }
+    .cal-date-num { text-align: left; }
+    .cal-cell.today .cal-date-num { align-self: flex-start; }
+    .agenda-day { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 700px) {
+    .topbar { padding: 16px 20px; border-radius: 20px; gap: 16px; position: static; }
+    .brand-title { font-size: 24px; }
+    .brand-sub { font-size: 10px; }
+    .big-metric { font-size: 48px; }
+    .days { font-size: 48px; }
+    .next-name { font-size: 28px; }
+    .card-inner { padding: 20px; }
+    .targets { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .target-item { width: 100%; justify-content: space-between; flex-direction: row; }
+    .target-item .big-metric { font-size: 36px; }
+    thead th { font-size: 8.5px; padding: 12px 8px; letter-spacing: 0.1em; }
+    .day-row td { padding: 14px 8px; }
+    .date-main { font-size: 20px; }
+    .autoarea, .cell-area, .todo-input { font-size: 12.5px; padding: 10px; }
+    .pagination-wrap { gap: 8px; }
+    .page-btn { width: 36px; height: 36px; font-size: 12px; border-radius: 10px; }
+    .page-arrow { width: 44px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="shell">
+<header class="topbar">
+    <div class="brand-row">
+        <div class="brand-logo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <span class="text-ink">Ace</span><span class="text-cobalt">Genie</span>
+        </div>
+        <div>
+            <div class="brand-title">Execution Protocol</div>
+            <div class="brand-sub">Daily JEE Operating System</div>
+        </div>
+    </div>
+    
+    <div class="view-tabs">
+        <button class="tab-btn active" onclick="switchMainView('protocol')" id="tab-protocol">Protocol</button>
+        <button class="tab-btn" onclick="switchMainView('calendar')" id="tab-calendar">Calendar</button>
+    </div>
+
+    <div class="utility-wrap">
+        <div class="sync-status">
+            <div class="sync-badge">
+                <span class="sync-dot synced" id="syncDot"></span>
+                <span id="syncText">Local Saved</span>
+            </div>
+            <div class="sync-time" id="syncTime">Last sync: Never</div>
+        </div>
+        <button class="action-btn secondary" onclick="exportData('AceGenie_ManualBackup')">Backup</button>
+        <button class="action-btn secondary" onclick="document.getElementById('importFile').click()">Restore</button>
+        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
+        <button class="action-btn" onclick="SyncManager.forceSync()">Sync Now</button>
+    </div>
+</header>
+
+<div id="view-protocol">
+    <section class="utility-grid">
+        <div class="remaining-card">
+            <div class="card-inner">
+                <div class="card-label"><span>Crack It</span><span class="today-tag" id="todayLabel"></span></div>
+                <div class="targets" style="margin-top: 0; border: none; padding: 0; background: transparent;">
+                    <div class="target-item">
+                        <span class="target-label">JEE Mains</span>
+                        <span class="big-metric blue" id="jeeMainsDays">—</span>
+                    </div>
+                    <div class="target-item">
+                        <span class="target-label">QFTs</span>
+                        <span class="big-metric blue" id="qftDays">—</span>
+                    </div>
+                    <div class="target-item">
+                        <span class="target-label">Streak (8H/60Q)</span>
+                        <span class="big-metric" style="color: var(--green); display: flex; align-items: center; gap: 4px;">
+                            <span id="currentStreak">0</span><span style="font-size: 32px;">🔥</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="quote-box" style="margin-top: 24px;">
+                    <textarea id="globalQuote" class="quote-input" placeholder="Write a quote, reflection, or daily focus here..."></textarea>
+                </div>
+
+                <div class="weekly-progress-inline">
+                    <div class="weekly-inline-head">
+                        <div>
+                            <div class="target-label">Weekly Questions Progress</div>
+                            <div class="weekly-inline-week" id="weeklyProgressWeek">Week 20</div>
+                        </div>
+                        <div class="weekly-inline-value" id="weeklyProgressLabel">0 / 700 Qs</div>
+                    </div>
+                    <div class="week-progress"><span id="weeklyProgressFill" style="width:0%"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="countdown-card">
+            <div class="card-inner">
+                <div class="card-label"><span>Next Test Countdown</span><span class="today-tag">SCHEDULED</span></div>
+                <div class="countdown-main">
+                    <div style="min-width:0">
+                        <div class="next-name" id="nextTestName">—</div>
+                        <div class="next-date" id="nextTestDate">—</div>
+                    </div>
+                    <div class="days" id="nextTestDays">—</div>
+                </div>
+                <div class="countdown-missions" id="countdownMissions"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="table-wrap">
+    <div class="table-scroll">
+    <table id="protocolTable">
+    <colgroup>
+        <col class="date"><col class="schedule"><col class="todo">
+        <col class="w6"><col class="w6">
+    </colgroup>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Schedule &amp; Diary</th>
+        <th>To-Do Items</th>
+        <th><div class="th-stack"><span>Total Qs</span><div class="th-target"><input id="tableQsTarget" class="mini-target" type="number" min="1" step="1" value="100"></div></div></th>
+        <th><div class="th-stack"><span>Hours</span><div class="th-target"><input id="tableHoursTarget" class="mini-target" type="number" min=".1" step=".5" value="10"></div></div></th>
+    </tr>
+    </thead>
+    <tbody id="weekContainer"></tbody>
+    </table>
+    </div>
+    </div>
+
+    <nav class="pagination-wrap" id="pagination"></nav>
+    <div class="footer-note">Execution Protocol · Local & Cloud Persistence</div>
+</div>
+
+<div id="view-calendar">
+    <div class="cal-header">
+        <div class="cal-title" id="calMonthYear">September 2026</div>
+        <div class="cal-nav">
+            <button onclick="Calendar.changeMonth(-1)">Prev</button>
+            <button onclick="Calendar.goToday()">Today</button>
+            <button onclick="Calendar.changeMonth(1)">Next</button>
+            <span style="border-left: 1px solid var(--line); margin: 0 4px;"></span>
+            <button class="cal-view-btn active" id="btn-cal-month" onclick="Calendar.switchCalView('month')">Month</button>
+            <button class="cal-view-btn" id="btn-cal-agenda" onclick="Calendar.switchCalView('agenda')">Agenda</button>
+        </div>
+    </div>
+    
+    <div id="cal-month-view">
+        <div class="cal-grid">
+            <div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div>
+            <div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div><div class="cal-day-head">Sun</div>
+            <!-- Cells generated by JS -->
+        </div>
+    </div>
+    
+    <div id="cal-agenda-view">
+        <!-- Agenda generated by JS -->
+    </div>
+</div>
+
+</div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="conflictModal">
+    <div class="modal">
+        <h3>Sync Conflict</h3>
+        <p>The cloud contains newer data modified from another device. Overwrite local data with the cloud version?</p>
+        <div class="modal-actions">
+            <button class="action-btn secondary" onclick="SyncManager.resolveConflict('local')">Keep Local</button>
+            <button class="action-btn" onclick="SyncManager.resolveConflict('cloud')">Use Cloud</button>
+        </div>
+    </div>
+</div>
+
+<div class="flash" id="flash"></div>
+
+<script>
+// --- Constants & Config ---
+const START_DATE = "2026-08-31";
+const END_DATE = "2027-01-17";
+const STORAGE = {
+    dayPrefix: "executionProtocol:day:",
+    targets: "executionProtocol:targets",
+    syncData: "executionProtocol:syncMetadata"
+};
+
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw-jdmdeHp2sdzQ95ynDMwU0OvBZ90L-DytHy9qKlCAhkzOku-jTHX8GjCpjNNdC5rdcw/exec";
+
+// FULL SYLLABUS RESTORED FROM ORIGINAL INDEX
+const TEST_SCHEDULE = {
+    "2026-09-06": [{ "name": "[QPT 7]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants" }],
+    "2026-09-13": [{ "name": "[QPT 8]", "syllabus": "All Chapters from QPT 5 to QPT 7. PYQS JEE Main Prep Check" }],
+    "2026-09-20": [{ "name": "[QAPT 5]", "syllabus": "Phy: KTG, Thermal Prop., Thermodynamics | Chem: Periodicity, Chemical Bonding | Math: Parabola, Ellipse, Hyperbola" }],
+    "2026-09-23": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-09-27": [{ "name": "[QPT 9]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry" }],
+    "2026-09-29": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-03": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-04": [{ "name": "[QAPT 6]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants" }],
+    "2026-10-07": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-11": [
+        { "name": "[QPT 10]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" },
+        { "name": "[QAPT 7]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry" }
+    ],
+    "2026-10-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-18": [{ "name": "[QPT 11]", "syllabus": "All Chapters of QPT 9 & 10 PYQS JEE Main Prep Check" }],
+    "2026-10-21": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-25": [
+        { "name": "[QPT 12]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" },
+        { "name": "[QAPT 8]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" }
+    ],
+    "2026-10-28": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-01": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-05": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-08": [
+        { "name": "[QPT 13]", "syllabus": "Phy: EM Induction, Alternating Current | Chem: Biomolecules, Coordination Compounds | Math: Area Under Curves, Differential Equations" },
+        { "name": "[QAPT 9]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" }
+    ],
+    "2026-11-15": [{ "name": "[QPT 14]", "syllabus": "All Chapters of QPT 12 & 13. PYQS JEE Main Prep Check" }],
+    "2026-11-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-21": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-22": [
+        { "name": "[QPT 15]", "syllabus": "Phy: Wave Optics, Ray Optics | Chem: d & f Block, p Block, Practical Chemistry | Math: 3D Geometry, Vector Algebra" },
+        { "name": "[QAPT 10]", "syllabus": "Phy: Alternating Current, EM Induction | Chem: Biomolecules, Polymers, Chem. in Everyday Life, Surface, Environmental | Math: Area Under Curves, Differential Equations" }
+    ],
+    "2026-11-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-29": [
+        { "name": "[QPT 16]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: General Organic Chemistry, Hydrocarbons | Math: Complex Number, Probability, Statistics" },
+        { "name": "[QFT 1]", "syllabus": "JEE Main Full Syllabus" }
+    ],
+    "2026-12-01": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-04": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-06": [
+        { "name": "[QAPT 11]", "syllabus": "Phy: Wave Optics, Ray Optics | Chem: s Block & Hydrogen, p Block, Metallurgy | Math: 3D Geometry, Vector Algebra" },
+        { "name": "[QFT 2]", "syllabus": "JEE Main Full Syllabus" }
+    ],
+    "2026-12-08": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-10": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-12": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-13": [{ "name": "[QFT 3]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-17": [{ "name": "[QFT 4]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-20": [
+        { "name": "[QAPT 12]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: d & f Block, Coordination Compounds, Practical Chemistry | Math: Complex Number, Probability, Statistics" },
+        { "name": "[QFT 5]", "syllabus": "JEE Main Full Syllabus" }
+    ],
+    "2026-12-24": [{ "name": "[QFT 6]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-27": [{ "name": "[QFT 7]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-31": [{ "name": "[QFT 8]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-03": [{ "name": "[QFT 9]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-06": [{ "name": "[QFT 10]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-08": [{ "name": "[QFT 11]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-10": [{ "name": "[QFT 12]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-12": [{ "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-14": [{ "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-15": [{ "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus" }]
+};
+
+// --- State Management ---
+let weeks = [];
+let currentWeek = 0;
+let stateCache = {};
+let targetState = loadTargets();
+let flashTimer;
+
+// --- Date Utils ---
+function pad(n){ return String(n).padStart(2,"0"); }
+function parseKey(k){ const [y,m,d]=k.split("-").map(Number); return new Date(Date.UTC(y,m-1,d)); }
+function keyFromDate(d){ return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`; }
+function addDays(key,n){ const d=parseKey(key); d.setUTCDate(d.getUTCDate()+n); return keyFromDate(d); }
+function daysBetween(a,b){ return Math.round((parseKey(b)-parseKey(a))/86400000); }
+function getIndiaToday(){
+    const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+    const o=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+    return `${o.year}-${o.month}-${o.day}`;
+}
+function fmtDate(key,full=false){
+    const d=parseKey(key);
+    return new Intl.DateTimeFormat("en-US",{timeZone:"UTC",month:"short",day:"numeric",year:full?"numeric":undefined,weekday:full?"long":undefined}).format(d);
+}
+function isWeekend(key){ return parseKey(key).getUTCDay() === 0; } // Only Sunday is highlighted
+function showFlash(msg, isError=false){
+    const el=document.getElementById("flash"); 
+    el.textContent=msg; 
+    el.className = `flash show ${isError ? 'error' : ''}`;
+    clearTimeout(flashTimer); flashTimer=setTimeout(()=>el.classList.remove("show"),2500);
+}
+
+// --- Data Access ---
+function readJSON(key,fallback){ try{const x=localStorage.getItem(key); return x?JSON.parse(x):fallback;}catch{return fallback;} }
+function writeJSON(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
+function loadTargets(){ const saved=readJSON(STORAGE.targets,{qs:100,hours:10, quote:""}); return {qs:Number(saved.qs)||100,hours:Number(saved.hours)||10, quote:saved.quote||""}; }
+
+function getDay(key){
+    if(!stateCache[key]){
+        stateCache[key]=Object.assign({diary:"",todos:[], qs:"", hours:"", _lastModified: 0},readJSON(STORAGE.dayPrefix+key,{}));
+    }
+    return stateCache[key];
+}
+
+function persistField(key, field, value){ 
+    const d = getDay(key); 
+    d[field] = value; 
+    d._lastModified = Date.now();
+    stateCache[key] = d; 
+    writeJSON(STORAGE.dayPrefix+key, d); 
+    SyncManager.hasUnsyncedChanges = true;
+    SyncManager.queueSync();
+}
+
+function addTodo(key,text){ 
+    const d=getDay(key); 
+    d.todos.push({text,done:false}); 
+    d._lastModified = Date.now();
+    writeJSON(STORAGE.dayPrefix+key, d);
+    SyncManager.hasUnsyncedChanges = true;
+    SyncManager.queueSync();
+    renderWeek(currentWeek); 
+}
+function updateTodo(key,index,done){ 
+    const d=getDay(key); 
+    d.todos[index].done=done; 
+    d._lastModified = Date.now();
+    writeJSON(STORAGE.dayPrefix+key, d);
+    SyncManager.hasUnsyncedChanges = true;
+    SyncManager.queueSync();
+    const row=document.querySelector(`[data-todo-toggle="${key}:${index}"]`)?.closest(".todo-row"); 
+    if(row)row.classList.toggle("done",done); 
+}
+function deleteTodo(key,index){ 
+    const d=getDay(key); 
+    d.todos.splice(index,1); 
+    d._lastModified = Date.now();
+    writeJSON(STORAGE.dayPrefix+key, d);
+    SyncManager.hasUnsyncedChanges = true;
+    SyncManager.queueSync();
+    renderWeek(currentWeek); 
+}
+
+function buildWeeks(){
+    weeks=[]; let cur=START_DATE;
+    while(cur<=END_DATE){ const days=[]; for(let i=0;i<7;i++) days.push(addDays(cur,i)); weeks.push({start:cur,end:days[6],days}); cur=addDays(cur,7); }
+}
+
+// --- Sync Engine ---
+const SyncManager = {
+    state: 'local_saved', // local_saved, saving, synced, offline, error
+    metadata: readJSON(STORAGE.syncData, { lastSyncTime: null }),
+    syncTimer: null,
+    cloudVersion: null,
+    cloudTimestamp: null,
+    forceOverwrite: false,
+    hasUnsyncedChanges: false,
+
+    updateUI() {
+        const dot = document.getElementById("syncDot");
+        const text = document.getElementById("syncText");
+        const time = document.getElementById("syncTime");
+        
+        dot.className = `sync-dot ${this.state}`;
+        
+        if(!navigator.onLine) this.state = 'offline';
+
+        if(this.state === 'synced') {
+            text.textContent = "Cloud Synced";
+            this.hasUnsyncedChanges = false;
+        } else if(this.state === 'saving') {
+            text.textContent = "Syncing...";
+        } else if(this.state === 'offline') {
+            text.textContent = "Offline - Queued";
+        } else if(this.state === 'local_saved' || this.hasUnsyncedChanges) {
+            text.textContent = "Local Saved (Pending Sync)";
+            dot.className = `sync-dot local_saved`;
+        } else {
+            text.textContent = "Sync Error";
+        }
+
+        if(this.metadata.lastSyncTime) {
+            const d = new Date(this.metadata.lastSyncTime);
+            time.textContent = `Last sync: ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+        }
+    },
+
+    queueSync() {
+        if(this.syncTimer) clearTimeout(this.syncTimer);
+        this.state = 'local_saved';
+        this.hasUnsyncedChanges = true;
+        this.updateUI();
+        this.syncTimer = setTimeout(() => {
+            this.state = 'saving';
+            this.updateUI();
+            this.performSync();
+        }, 3000); // Debounce 3s
+    },
+
+    forceSync() {
+        if(this.syncTimer) clearTimeout(this.syncTimer);
+        this.state = 'saving';
+        this.updateUI();
+        this.performSync();
+    },
+
+    async performSync() {
+        if(!navigator.onLine) {
+            this.state = 'offline';
+            this.updateUI();
+            return;
+        }
+
+        try {
+            let payload = { global: targetState };
+            for(let i=0; i<localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if(key.startsWith(STORAGE.dayPrefix)) {
+                    const dateKey = key.substring(STORAGE.dayPrefix.length);
+                    payload[dateKey] = JSON.parse(localStorage.getItem(key));
+                }
+            }
+
+            const requestBody = {
+                deviceTime: Date.now(),
+                lastSyncTime: this.metadata.lastSyncTime || 0,
+                forceOverwrite: this.forceOverwrite || false,
+                data: payload
+            };
+
+            const response = await fetch(WEB_APP_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain" }, 
+                body: JSON.stringify(requestBody)
+            });
+
+            if(!response.ok) throw new Error("Network response was not ok");
+            
+            const result = await response.json();
+            
+            if(result.status === 'conflict') {
+                this.cloudVersion = result.cloudData;
+                this.cloudTimestamp = result.cloudTimestamp;
+                document.getElementById('conflictModal').style.display = 'grid';
+                this.state = 'error';
+                return;
+            }
+
+            if(result.status === 'success') {
+                this.state = 'synced';
+                this.metadata.lastSyncTime = result.cloudTimestamp;
+                this.forceOverwrite = false;
+                this.hasUnsyncedChanges = false;
+                writeJSON(STORAGE.syncData, this.metadata);
+            }
+            
+        } catch(e) {
+            console.error("Sync failed:", e);
+            this.state = 'error';
+            if(e instanceof TypeError && e.message.includes("fetch")) {
+                 showFlash("CORS Error: Update Apps Script to return JSON.", true);
+            } else {
+                 showFlash("Sync failed. Data saved locally.", true);
+            }
+        }
+        this.updateUI();
+    },
+
+    resolveConflict(choice) {
+        document.getElementById('conflictModal').style.display = 'none';
+        if(choice === 'cloud' && this.cloudVersion) {
+            for(const key in this.cloudVersion) {
+                if(key === 'global') {
+                    targetState = this.cloudVersion[key];
+                    writeJSON(STORAGE.targets, targetState);
+                } else {
+                    stateCache[key] = this.cloudVersion[key];
+                    writeJSON(STORAGE.dayPrefix+key, this.cloudVersion[key]);
+                }
+            }
+            renderWeek(currentWeek);
+            if(currentView === 'calendar') Calendar.render();
+            document.getElementById("globalQuote").value = targetState.quote || "";
+            document.getElementById("tableQsTarget").value = targetState.qs || 100;
+            document.getElementById("tableHoursTarget").value = targetState.hours || 10;
+            updateLiveMetrics();
+            
+            this.metadata.lastSyncTime = this.cloudTimestamp;
+            writeJSON(STORAGE.syncData, this.metadata);
+            this.state = 'synced';
+            showFlash("Cloud data applied.");
+        } else {
+            showFlash("Local data kept. Will overwrite cloud next sync.");
+            this.forceOverwrite = true;
+            this.queueSync();
+        }
+        this.cloudVersion = null;
+        this.updateUI();
+    }
+};
+
+window.addEventListener('online', () => SyncManager.forceSync());
+window.addEventListener('offline', () => SyncManager.updateUI());
+
+// --- Backup & Restore ---
+function exportData(prefix = "AceGenie_Backup") {
+    let payload = { global: targetState };
+    for(let i=0; i<localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if(key.startsWith(STORAGE.dayPrefix)) {
+            const dateKey = key.substring(STORAGE.dayPrefix.length);
+            payload[dateKey] = JSON.parse(localStorage.getItem(key));
+        }
+    }
+    const dataStr = JSON.stringify(payload, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${prefix}_${getIndiaToday()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    if(prefix !== "AutoBackup_BeforeRestore") showFlash("Backup downloaded!");
+}
+
+function importData(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const imported = JSON.parse(evt.target.result);
+            if(typeof imported !== 'object' || Array.isArray(imported)) throw new Error("Invalid structure");
+            
+            if(confirm("Warning: This will merge the imported backup with your current local data. A local backup will be created first. Continue?")) {
+                exportData("AutoBackup_BeforeRestore");
+                
+                for(const key in imported) {
+                    if(key === 'global') {
+                        targetState = imported[key];
+                        writeJSON(STORAGE.targets, targetState);
+                    } else if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                        stateCache[key] = imported[key];
+                        writeJSON(STORAGE.dayPrefix+key, imported[key]);
+                    }
+                }
+                renderWeek(currentWeek);
+                if(currentView === 'calendar') Calendar.render();
+                document.getElementById("globalQuote").value = targetState.quote || "";
+                document.getElementById("tableQsTarget").value = targetState.qs || 100;
+                document.getElementById("tableHoursTarget").value = targetState.hours || 10;
+                updateLiveMetrics();
+                SyncManager.hasUnsyncedChanges = true;
+                SyncManager.queueSync();
+                showFlash("Backup restored successfully!");
+            }
+        } catch(err) {
+            showFlash("Invalid backup file.", true);
+        }
+        e.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+// --- View Switching ---
+let currentView = 'protocol';
+function switchMainView(view) {
+    currentView = view;
+    document.getElementById('tab-protocol').classList.toggle('active', view === 'protocol');
+    document.getElementById('tab-calendar').classList.toggle('active', view === 'calendar');
+    document.getElementById('view-protocol').style.display = view === 'protocol' ? 'block' : 'none';
+    document.getElementById('view-calendar').style.display = view === 'calendar' ? 'block' : 'none';
+    
+    if(view === 'calendar') Calendar.render();
+    if(view === 'protocol') {
+        renderWeek(currentWeek);
+        setTimeout(() => jumpToToday(), 100);
+    }
+}
+
+// --- Calendar Logic ---
+const Calendar = {
+    currentDate: parseKey(getIndiaToday()),
+    mode: 'month',
+    
+    switchCalView(mode) {
+        this.mode = mode;
+        document.getElementById('btn-cal-month').classList.toggle('active', mode === 'month');
+        document.getElementById('btn-cal-agenda').classList.toggle('active', mode === 'agenda');
+        document.getElementById('cal-month-view').style.display = mode === 'month' ? 'block' : 'none';
+        document.getElementById('cal-agenda-view').style.display = mode === 'agenda' ? 'flex' : 'none';
+        this.render();
+    },
+
+    changeMonth(dir) {
+        this.currentDate.setUTCMonth(this.currentDate.getUTCMonth() + dir);
+        this.render();
+    },
+    goToday() {
+        this.currentDate = parseKey(getIndiaToday());
+        this.render();
+    },
+    jumpToDay(dateStr) {
+        switchMainView('protocol');
+        const foundWeek = weeks.findIndex(w => dateStr >= w.start && dateStr <= w.end);
+        if (foundWeek !== -1) {
+            renderWeek(foundWeek);
+            setTimeout(() => {
+                const el = document.querySelector(`[data-date-row="${dateStr}"]`);
+                if(el) {
+                    const y = el.getBoundingClientRect().top + window.scrollY - 100;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }
+            }, 100);
+        }
+    },
+    render() {
+        const year = this.currentDate.getUTCFullYear();
+        const month = this.currentDate.getUTCMonth();
+        document.getElementById('calMonthYear').textContent = new Intl.DateTimeFormat('en-US', {month:'long', year:'numeric'}).format(this.currentDate);
+        
+        if (this.mode === 'month') {
+            // Shift to Mon=0, Tue=1... Sun=6
+            const firstDayJS = new Date(Date.UTC(year, month, 1)).getUTCDay();
+            const emptySlots = (firstDayJS + 6) % 7; 
+            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+            
+            const grid = document.querySelector('.cal-grid');
+            Array.from(grid.children).forEach(el => { if(el.classList.contains('cal-cell')) el.remove(); });
+            
+            const todayStr = getIndiaToday();
+            
+            for(let i=0; i<emptySlots; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell empty';
+                grid.appendChild(cell);
+            }
+            
+            for(let i=1; i<=daysInMonth; i++) {
+                const dateStr = `${year}-${pad(month+1)}-${pad(i)}`;
+                const cell = document.createElement('div');
+                cell.className = `cal-cell ${dateStr === todayStr ? 'today' : ''}`;
+                cell.onclick = () => this.jumpToDay(dateStr);
+                
+                let html = `<div class="cal-date-num">${i}</div>`;
+                
+                if(TEST_SCHEDULE[dateStr]) {
+                    TEST_SCHEDULE[dateStr].forEach(t => {
+                        html += `<div class="cal-event-test">${esc(t.name)}</div>`;
+                    });
+                }
+                
+                const dayData = stateCache[dateStr];
+                if(dayData && dayData.todos && dayData.todos.length > 0) {
+                    const doneCount = dayData.todos.filter(t => t.done).length;
+                    const total = dayData.todos.length;
+                    html += `<div class="cal-event-todo ${doneCount===total?'done':''}">${doneCount}/${total} Tasks</div>`;
+                }
+                
+                if(dayData && dayData.hours && parseFirstNumber(dayData.hours) >= 8) {
+                    html += `<div class="cal-event-todo" style="background:var(--lime); color:var(--ink);">🔥 8+ Hrs</div>`;
+                }
+                
+                cell.innerHTML = html;
+                grid.appendChild(cell);
+            }
+        } else {
+            // Agenda View
+            const agendaContainer = document.getElementById('cal-agenda-view');
+            agendaContainer.innerHTML = '';
+            
+            const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+            let hasEvents = false;
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const dateStr = `${year}-${pad(month+1)}-${pad(i)}`;
+                const dayData = stateCache[dateStr];
+                const tests = TEST_SCHEDULE[dateStr] || [];
+                const todos = (dayData && dayData.todos) ? dayData.todos : [];
+                
+                if(tests.length > 0 || todos.length > 0 || (dayData && dayData.diary)) {
+                    hasEvents = true;
+                    const dObj = parseKey(dateStr);
+                    const weekday = new Intl.DateTimeFormat('en-US', {timeZone:'UTC', weekday:'short'}).format(dObj);
+                    
+                    let eventsHtml = '';
+                    tests.forEach(t => eventsHtml += `<div class="cal-event-test">${esc(t.name)}:${esc(t.syllabus)}</div>`);
+                    todos.forEach(t => eventsHtml += `<div class="cal-event-todo ${t.done?'done':''}" style="font-size:12px; padding:6px 10px;">${esc(t.text)}</div>`);
+                    if(dayData && dayData.diary) {
+                        eventsHtml += `<div style="font-size:12px; color:var(--muted-2); margin-top:4px; font-style:italic;">📖 ${esc(dayData.diary)}</div>`;
+                    }
+
+                    agendaContainer.innerHTML += `
+                        <div class="agenda-day" style="cursor:pointer;" onclick="Calendar.jumpToDay('${dateStr}')">
+                            <div>
+                                <div class="agenda-date">${i}${new Intl.DateTimeFormat('en-US', {month:'short'}).format(dObj).toUpperCase()}</div>
+                                <div class="agenda-weekday">${weekday}</div>
+                            </div>
+                            <div class="agenda-events">${eventsHtml}</div>
+                        </div>
+                    `;
+                }
+            }
+            if(!hasEvents) {
+                agendaContainer.innerHTML = `<div style="text-align:center; padding: 40px; color:var(--muted-3); font-weight:600;">No scheduled tasks or tests this month.</div>`;
+            }
+        }
+    }
+};
+
+// --- Render Utilities ---
+function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])); }
+function parseFirstNumber(text){ const m=String(text??"").replace(/,/g,"").match(/-?\d+(?:\.\d+)?/); return m?Number(m[0]):0; }
+function formatNum(n){ return Number.isInteger(n)?String(n):Number(n).toFixed(1).replace(/\.0$/,""); }
+function autoResize(el){ if(!el)return; el.style.height="auto"; el.style.height=Math.max(36,el.scrollHeight)+"px"; }
+function subjectClass(name){ if(name.includes("QAPT"))return"qapt"; if(name.includes("QFT"))return"qft"; if(name.includes("2026"))return"main"; return""; }
+
+function renderTagBits(text){
+    const parts=String(text??"").split(/(\[PHY\]|\[CHEM\]|#MATH|#PHY|#CHEM)/gi);
+    return parts.filter(Boolean).map(part=>{
+        const up=part.toUpperCase(); let cls="other";
+        if(up==="[PHY]"||up==="#PHY")cls="phy"; else if(up==="[CHEM]"||up==="#CHEM")cls="chem"; else if(up==="#MATH")cls="math";
+        return `<span class="tag ${cls}">${esc(part)}</span>`;
+    }).join("");
+}
+
+function testChapters(syllabus){
+    const chunks=String(syllabus||"").split("|").map(x=>x.trim()).filter(Boolean);
+    const out=[];
+    chunks.forEach(chunk=>{
+        const colon=chunk.indexOf(":");
+        if(colon>0 && colon<12){
+            const subject=chunk.slice(0,colon).trim();
+            const body=chunk.slice(colon+1).trim();
+            const chapters=body.split(",").map(x=>x.trim()).filter(Boolean);
+            if(chapters.length>1) chapters.forEach(ch=>out.push(`${subject}:${ch}`));
+            else out.push(chunk);
+        } else out.push(chunk);
+    });
+    return out;
+}
+
+function missionKey(date,ti,ci){ return `mission2:${date}:${ti}:${ci}`; }
+
+function renderMissionList(key,test,ti,day,mode="table"){
+    let ci=0,html="";
+    testChapters(test.syllabus).forEach(ch=>{
+        const mk=missionKey(key,ti,ci++), checked=!!day[mk];
+        html+=`<label class="mission ${mode}"><input class="tiny-check mission-box" type="checkbox" data-date="${key}" data-mission="${mk}" ${checked?"checked":""}><span>${esc(ch)}</span></label>`;
+    });
+    return html;
+}
+
+function renderTests(key,day){
+    const tests=TEST_SCHEDULE[key]||[];
+    if(!tests.length) return ``;
+    return `<div class="test-stack">${tests.map((t,ti)=>`
+        <div class="test-item">
+            <div class="pill-row"><span class="test-pill ${subjectClass(t.name)}">${esc(t.name)}</span></div>
+            <div class="syllabus-caption">SYLLABUS</div>
+            <div class="missions">${renderMissionList(key,t,ti,day)}</div>
+        </div>`).join("")}</div>`;
+}
+
+function renderDiary(key,day){
+    const val = day.diary ?? "";
+    return `<div class="priority-wrap">
+        <div class="priority-label">Daily Diary</div>
+        <textarea rows="2" class="autoarea cell-area diary-area" data-date="${key}" data-field="diary" placeholder="What happened today? Mistakes? Improvements?">${esc(val)}</textarea>
+    </div>`;
+}
+
+function renderTodos(key,day){
+    const todos = day.todos || [];
+    return `<div class="todo-composer">
+            <textarea rows="1" class="autoarea todo-input" data-date="${key}" placeholder="Add task (use [PHY], [CHEM], #MATH for tags)…" aria-label="New task"></textarea>
+            <button class="todo-add" data-add-todo="${key}" title="Add task">+</button>
+        </div>
+        <div class="todo-list">${todos.map((it,ii)=>`<div class="todo-row ${it.done?"done":""}">
+            <input class="todo-check" type="checkbox" data-todo-toggle="${key}:${ii}" ${it.done?"checked":""}>
+            <div class="todo-content"><div class="todo-text">${esc(it.text)}</div>${/(\[PHY\]|\[CHEM\]|#MATH|#PHY|#CHEM)/i.test(it.text)?`<div class="todo-tags">${renderTagBits(it.text)}</div>`:""}</div>
+            <button class="todo-delete" data-todo-delete="${key}:${ii}" aria-label="Delete task">×</button>
+        </div>`).join("")||`<div class="small-note todo-empty">No tasks scheduled yet.</div>`}</div>`;
+}
+
+function textCell(key,day,field){
+    const val=day[field]??"";
+    const num=parseFirstNumber(val),target=field==="qs"?targetState.qs:targetState.hours,pct=target?Math.max(0,Math.min(100,(num/target)*100)):0;
+    return `<input type="text" class="numeric-input center" data-date="${key}" data-field="${field}" aria-label="${field}" value="${esc(val)}" placeholder="0">
+    <div class="progress ${field==="hours"?"blue":""}"><span style="width:${pct}%"></span></div><div class="metric-read">${formatNum(num)} / ${formatNum(target)}</div>`;
+}
+
+function renderWeek(index){
+    currentWeek=index; const week=weeks[index],today=getIndiaToday(),container=document.getElementById("weekContainer");
+    const rows=week.days.map(key=>{
+        const day=getDay(key),d=parseKey(key),weekday=new Intl.DateTimeFormat("en-US",{timeZone:"UTC",weekday:"short"}).format(d),classes=[isWeekend(key)?"weekend":"",key===today?"today":""].filter(Boolean).join(" ");
+        return `<tr class="day-row ${classes}" data-date-row="${key}">
+            <td><div class="date-box"><div class="date-line"><div><div class="date-main">${fmtDate(key)}</div><div class="date-weekday">${weekday}</div></div></div><div class="small-note">${key===today?"TODAY":isWeekend(key)?"WEEKEND":"PROTOCOL DAY"}</div></div></td>
+            <td>${renderTests(key,day)}${renderDiary(key,day)}</td>
+            <td>${renderTodos(key,day)}</td>
+            <td class="numeric-cell">${textCell(key,day,"qs")}</td>
+            <td class="numeric-cell">${textCell(key,day,"hours")}</td>
+        </tr>`;
+    }).join("");
+    container.innerHTML=rows;
+    container.querySelectorAll(".autoarea").forEach(autoResize);
+    
+    document.getElementById("pagination").innerHTML=`<button class="page-btn page-arrow" data-page="${Math.max(0,currentWeek-1)}" ${currentWeek===0?"disabled":""}>‹</button>`+weeks.map((_,i)=>`<button class="page-btn ${i===currentWeek?"active":""}" data-page="${i}" aria-label="Week ${20-i}">${20-i}</button>`).join("")+`<button class="page-btn page-arrow" data-page="${Math.min(weeks.length-1,currentWeek+1)}" ${currentWeek===weeks.length-1?"disabled":""}>›</button>`;
+}
+
+function formatCountdown(days) { return days > 0 ? days + "d" : days === 0 ? "TODAY" : "DONE"; }
+
+function updateLiveMetrics(){
+    const today=getIndiaToday(), d=getDay(today);
+    
+    document.getElementById("todayLabel").textContent=fmtDate(today);
+
+    // Week Progress
+    const week=weeks[currentWeek];
+    if(week) {
+        const qTotal=week.days.reduce((sum,key)=>sum+parseFirstNumber(getDay(key).qs),0);
+        const target=targetState.qs*7, pct=target?Math.min(100,qTotal/target*100):0;
+        document.getElementById("weeklyProgressFill").style.width=pct+"%";
+        document.getElementById("weeklyProgressLabel").textContent=`${formatNum(qTotal)} / ${formatNum(target)} Qs`;
+        document.getElementById("weeklyProgressWeek").textContent=`Week ${20-currentWeek}`;
+    }
+
+    // Row Progress
+    document.querySelectorAll(".day-row").forEach(row=>{
+        row.querySelectorAll(".progress").forEach(bar=>{
+            const input=bar.previousElementSibling; if(!input)return;
+            const field=input.dataset.field, target=field==="qs"?targetState.qs:targetState.hours, num=parseFirstNumber(input.value), pct=target?Math.max(0,Math.min(100,num/target*100)):0;
+            bar.querySelector("span").style.width=pct+"%"; bar.nextElementSibling.textContent=`${formatNum(num)} / ${formatNum(target)}`;
+        });
+    });
+
+    // Countdowns
+    document.getElementById("jeeMainsDays").textContent = formatCountdown(daysBetween(today, '2027-01-22'));
+    document.getElementById("qftDays").textContent = formatCountdown(daysBetween(today, '2026-11-29'));
+
+    const all=Object.entries(TEST_SCHEDULE).sort((a,b)=>a[0].localeCompare(b[0])), next=all.find(([date])=>date>=today);
+    const nN=document.getElementById("nextTestName"), nD=document.getElementById("nextTestDate"), nDays=document.getElementById("nextTestDays");
+    if(!next){nN.textContent="Complete";nD.textContent="No future tests";nDays.textContent="—";document.getElementById("countdownMissions").innerHTML="";}
+    else {
+        const [date,tests]=next, delta=daysBetween(today,date);
+        nN.textContent=tests.map(t=>t.name).join(" + "); nD.textContent=fmtDate(date,true); nDays.textContent=delta===0?"TODAY":`${delta}d`; nDays.classList.toggle("today",delta===0);
+        
+        // Re-render countdown missions to bind checkboxes to the state
+        const cdDay = getDay(date);
+        document.getElementById("countdownMissions").innerHTML = tests.map((t,ti)=>`<div class="countdown-test"><div class="countdown-test-name">${esc(t.name)}</div><div class="countdown-mission-list">${testChapters(t.syllabus).map((ch,ci)=>{
+            const key=missionKey(date,ti,ci); return `<label class="mission countdown"><input class="tiny-check mission-box" type="checkbox" data-date="${date}" data-mission="${key}" ${cdDay[key]?"checked":""}><span>${esc(ch)}</span></label>`;
+        }).join("")}</div></div>`).join("");
+    }
+
+    // Streak Logic (8 Hrs + 60 Qs)
+    let streak = 0, dStr = today;
+    let tDay = getDay(today);
+    let tMet = (parseFirstNumber(tDay.hours) >= 8 && parseFirstNumber(tDay.qs) >= 60);
+    
+    if (tMet) {
+        streak++; dStr = addDays(today, -1);
+        while(dStr >= START_DATE) {
+            let day = getDay(dStr);
+            if (parseFirstNumber(day.hours) >= 8 && parseFirstNumber(day.qs) >= 60) { streak++; dStr = addDays(dStr, -1); } else break;
+        }
+    } else {
+        dStr = addDays(today, -1);
+        if (dStr >= START_DATE) {
+            let yDay = getDay(dStr);
+            if (parseFirstNumber(yDay.hours) >= 8 && parseFirstNumber(yDay.qs) >= 60) {
+                while(dStr >= START_DATE) {
+                    let day = getDay(dStr);
+                    if (parseFirstNumber(day.hours) >= 8 && parseFirstNumber(day.qs) >= 60) { streak++; dStr = addDays(dStr, -1); } else break;
+                }
+            }
+        }
+    }
+    document.getElementById("currentStreak").textContent = streak;
+
+    SyncManager.updateUI();
+}
+
+function jumpToToday() {
+    const el = document.querySelector('.day-row.today');
+    if(el) {
+        const y = el.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({top: y, behavior: 'smooth'});
+    }
+}
+
+document.addEventListener("input",e=>{
+    const t=e.target;
+    if(t.matches(".cell-area,.autoarea.todo-input")){ autoResize(t); if(t.dataset.field) { persistField(t.dataset.date,t.dataset.field,t.value); } }
+    if(t.matches(".numeric-input")){ persistField(t.dataset.date,t.dataset.field,t.value); updateLiveMetrics(); }
+    if(t.matches("#globalQuote")){ targetState.quote = t.value; saveTargets(); SyncManager.hasUnsyncedChanges = true; SyncManager.queueSync(); }
+});
+
+document.addEventListener("click",e=>{
+    const pg=e.target.closest("[data-page]");
+    if(pg&&!pg.disabled){ renderWeek(Number(pg.dataset.page)); updateLiveMetrics(); return; }
+    
+    const add=e.target.closest("[data-add-todo]");
+    if(add){ const key=add.dataset.addTodo, input=add.closest(".todo-composer")?.querySelector(".todo-input"), text=input?.value.trim(); if(text){addTodo(key,text);showFlash("Task added.");} return; }
+    
+    const del=e.target.closest("[data-todo-delete]");
+    if(del){ const parts=del.dataset.todoDelete.split(":"); deleteTodo(parts[0],Number(parts[1])); showFlash("Task removed."); return; }
+});
+document.addEventListener("change",e=>{
+    if(e.target.matches(".mission-box")){ 
+        const d=getDay(e.target.dataset.date); 
+        d[e.target.dataset.mission]=e.target.checked; 
+        d._lastModified=Date.now(); 
+        writeJSON(STORAGE.dayPrefix+e.target.dataset.date, d);
+        SyncManager.hasUnsyncedChanges = true;
+        SyncManager.queueSync();
+        showFlash(e.target.checked?"Chapter marked complete.":"Chapter reopened."); 
+        updateLiveMetrics(); 
+        return; 
+    }
+    if(e.target.matches(".todo-check")){ const [k,i]=e.target.dataset.todoToggle.split(":"); updateTodo(k,Number(i),e.target.checked); }
+});
+document.addEventListener("keydown",e=>{
+    if(e.key==="Enter"&&!e.shiftKey&&e.target.matches(".todo-input")){ e.preventDefault(); e.target.closest(".todo-composer")?.querySelector(".todo-add")?.click(); }
+});
+
+["tableQsTarget"].forEach(id=>document.getElementById(id).addEventListener("change",e=>{ targetState.qs=Math.max(1,Number(e.target.value)||100); saveTargets(); SyncManager.hasUnsyncedChanges = true; SyncManager.queueSync(); renderWeek(currentWeek); updateLiveMetrics(); }));
+["tableHoursTarget"].forEach(id=>document.getElementById(id).addEventListener("change",e=>{ targetState.hours=Math.max(.1,Number(e.target.value)||10); saveTargets(); SyncManager.hasUnsyncedChanges = true; SyncManager.queueSync(); renderWeek(currentWeek); updateLiveMetrics(); }));
+
+// Initialization
+buildWeeks();
+document.getElementById("tableQsTarget").value=targetState.qs; 
+document.getElementById("tableHoursTarget").value=targetState.hours;
+document.getElementById("globalQuote").value=targetState.quote || "";
+
+const todayStr = getIndiaToday();
+let initialWeek = weeks.findIndex(w => todayStr >= w.start && todayStr <= w.end);
+renderWeek(initialWeek !== -1 ? initialWeek : 0);
+
+// Ensure the page jumps to today immediately after rendering
+setTimeout(() => jumpToToday(), 200);
+
+updateLiveMetrics();
+setInterval(updateLiveMetrics, 30000);
+SyncManager.updateUI();
+
+/* 
+========================================================================================
+GOOGLE APPS SCRIPT REQUIRED CODE FOR RELIABLE CLOUD SYNC
+----------------------------------------------------------------------------------------
+To use the new Sync Manager effectively, you need to configure your Google Apps Script 
+endpoint to return JSON instead of relying on `no-cors` behavior. 
+
+1. Open your Google Apps Script project.
+2. Replace your existing `doPost` function with this exact code:
+
+function doPost(e) {
+  try {
+    var request = JSON.parse(e.postData.contents);
+    var userProps = PropertiesService.getUserProperties();
+    
+    var cloudDataStr = userProps.getProperty('aceGenieData');
+    var cloudMetaStr = userProps.getProperty('aceGenieMeta');
+    var cloudMeta = cloudMetaStr ? JSON.parse(cloudMetaStr) : { timestamp: 0 };
+    
+    var isConflict = !request.forceOverwrite && request.lastSyncTime < cloudMeta.timestamp;
+    
+    if (isConflict) {
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'conflict',
+        cloudTimestamp: cloudMeta.timestamp,
+        cloudData: JSON.parse(cloudDataStr)
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    var newTimestamp = new Date().getTime();
+    userProps.setProperty('aceGenieData', JSON.stringify(request.data));
+    userProps.setProperty('aceGenieMeta', JSON.stringify({ timestamp: newTimestamp }));
+    
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'success', 
+      cloudTimestamp: newTimestamp 
+    })).setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'error', message: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doOptions(e) {
+  // Required to handle preflight CORS requests from the browser
+  var headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400"
+  };
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeaders(headers);
+}
+
+3. Click "Deploy" -> "New Deployment" (DO NOT just save).
+4. Set "Who has access" to "Anyone".
+5. Copy the new Web App URL and paste it into the `WEB_APP_URL` constant above.
+========================================================================================
+*/
+</script>
+</body>
+</html>
