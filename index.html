@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>MAKE IT HAPPEN 🔥🔥</title>
+<title>JEE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -178,6 +178,7 @@ tbody.week-body { display: table-row-group; }
 .test-pill.qapt { background: var(--cobalt); color: #fff; border-color: var(--cobalt); }
 .test-pill.qft { background: var(--ink); color: var(--lime); border-color: var(--ink); }
 .test-pill.main { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.test-pill.hft { background: var(--orange, var(--cobalt)); color: var(--ink); border-color: var(--orange, var(--cobalt)); }
 .syllabus-caption { font-size: 9.5px; letter-spacing: 0.14em; color: var(--muted-3); text-transform: uppercase; font-weight: 800; margin-top: 12px; margin-bottom: 8px; }
 
 .missions { display: flex; flex-direction: column; gap: 8px; }
@@ -351,8 +352,8 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
             <span class="text-ink">JEE</span><span class="text-cobalt">2027</span>
         </div>
         <div>
-            <div class="brand-title">Under 1000 ADV2027</div>
-            <div class="brand-sub">99.7+ JEE MAIN2027</div>
+            <div class="brand-title">UNDER 1500 IN ADV27</div>
+            <div class="brand-sub">99.9+ IN JM27</div>
         </div>
     </div>
     
@@ -399,7 +400,7 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
                 </div>
                 
                 <div class="quote-box" style="margin-top: 24px;">
-                    <textarea id="globalQuote" class="quote-input" placeholder="If not now then when?? Time slips and you will have nothing left. Do it NOW!!"></textarea>
+                    <textarea id="globalQuote" class="quote-input" placeholder="Write a quote, reflection, or daily focus here..."></textarea>
                 </div>
 
                 <div class="weekly-progress-inline">
@@ -452,7 +453,7 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
     </div>
 
     <nav class="pagination-wrap" id="pagination"></nav>
-    <div class="footer-note">Execution Protocol · Local & Cloud Persistence</div>
+    <div class="footer-note">MAKE THE DAYS COUNT</div>
 </div>
 
 <div id="view-calendar">
@@ -525,48 +526,151 @@ const TEST_SCHEDULE = {
         { "name": "[QPT 10]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" },
         { "name": "[QAPT 7]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry" }
     ],
-    "2026-10-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 3]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-11-08": [{ "name": "[QPT 11]", "syllabus": "All Chapters of QPT 9 & 10 PYQS JEE Main Prep Check" }],
-    "2026-10-21": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-21": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 9]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-11-15": [
         { "name": "[QPT 12]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" },
         { "name": "[QAPT 8]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" }
     ],
-    "2026-10-28": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-05": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-10-28": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 15]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-11-05": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 22]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-11-22": [
         { "name": "[QPT 13]", "syllabus": "Phy: EM Induction, Alternating Current | Chem: Biomolecules, Coordination Compounds | Math: Area Under Curves, Differential Equations" },
         { "name": "[QAPT 9]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" }
     ],
     "2026-11-29": [{ "name": "[QFT 1]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 33]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-10-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-01": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-11-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 39]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-12-01": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 44]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-10-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
     "2026-12-06": [{ "name": "[QPT 15]", "syllabus": "Phy: Wave Optics, Ray Optics | Chem: d & f Block, p Block, Practical Chemistry | Math: 3D Geometry, Vector Algebra" },
         { "name": "[QFT 2]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-08": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-10": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-12": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-08": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 50]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-12-10": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 52]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-12-12": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 54]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-12-13": [{ "name": "[QPT 16]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: General Organic Chemistry, Hydrocarbons | Math: Complex Number, Probability, Statistics" },
         { "name": "[QFT 3]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-17": [{ "name": "[QFT 4]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 55]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-12-17": [{ "name": "[QFT 4]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 58]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-12-20": [
         { "name": "[QAPT 12]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: d & f Block, Coordination Compounds, Practical Chemistry | Math: Complex Number, Probability, Statistics" },
         { "name": "[QFT 5]", "syllabus": "JEE Main Full Syllabus" }
     ],
-    "2026-12-24": [{ "name": "[QFT 6]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-24": [{ "name": "[QFT 6]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 64]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2026-12-27": [{ "name": "[QFT 7]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-31": [{ "name": "[QFT 8]", "syllabus": "JEE Main Full Syllabus" }],
+    "2026-12-31": [{ "name": "[QFT 8]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 70]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2027-01-03": [{ "name": "[QFT 9]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-06": [{ "name": "[QFT 10]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-08": [{ "name": "[QFT 11]", "syllabus": "JEE Main Full Syllabus" }],
+    "2027-01-06": [{ "name": "[QFT 10]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 75]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2027-01-08": [{ "name": "[QFT 11]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 77]", "syllabus": "PYQ Based Topic Test" }
+    ],
     "2027-01-10": [{ "name": "[QFT 12]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-12": [{ "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-14": [{ "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-15": [{ "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus" }]
+    "2027-01-12": [{ "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 80]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2027-01-14": [{ "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 82]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2027-01-15": [{ "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus" },
+        { "name": "[HFT 83]", "syllabus": "PYQ Based Topic Test" }
+    ],
+    "2026-10-12": [{ "name": "[HFT 1]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-13": [{ "name": "[HFT 2]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-15": [{ "name": "[HFT 4]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-16": [{ "name": "[HFT 5]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-17": [{ "name": "[HFT 6]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-19": [{ "name": "[HFT 7]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-20": [{ "name": "[HFT 8]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-22": [{ "name": "[HFT 10]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-23": [{ "name": "[HFT 11]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-24": [{ "name": "[HFT 12]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-26": [{ "name": "[HFT 13]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-27": [{ "name": "[HFT 14]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-29": [{ "name": "[HFT 16]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-30": [{ "name": "[HFT 17]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-10-31": [{ "name": "[HFT 18]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-02": [{ "name": "[HFT 19]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-03": [{ "name": "[HFT 20]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-04": [{ "name": "[HFT 21]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-06": [{ "name": "[HFT 23]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-07": [{ "name": "[HFT 24]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-09": [{ "name": "[HFT 25]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-10": [{ "name": "[HFT 26]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-11": [{ "name": "[HFT 27]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-12": [{ "name": "[HFT 28]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-13": [{ "name": "[HFT 29]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-14": [{ "name": "[HFT 30]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-16": [{ "name": "[HFT 31]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-17": [{ "name": "[HFT 32]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-19": [{ "name": "[HFT 34]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-20": [{ "name": "[HFT 35]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-21": [{ "name": "[HFT 36]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-23": [{ "name": "[HFT 37]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-24": [{ "name": "[HFT 38]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-26": [{ "name": "[HFT 40]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-27": [{ "name": "[HFT 41]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-28": [{ "name": "[HFT 42]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-11-30": [{ "name": "[HFT 43]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-02": [{ "name": "[HFT 45]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-03": [{ "name": "[HFT 46]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-04": [{ "name": "[HFT 47]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-05": [{ "name": "[HFT 48]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-07": [{ "name": "[HFT 49]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-09": [{ "name": "[HFT 51]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-11": [{ "name": "[HFT 53]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-15": [{ "name": "[HFT 56]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-16": [{ "name": "[HFT 57]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-18": [{ "name": "[HFT 59]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-19": [{ "name": "[HFT 60]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-21": [{ "name": "[HFT 61]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-22": [{ "name": "[HFT 62]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-23": [{ "name": "[HFT 63]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-25": [{ "name": "[HFT 65]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-26": [{ "name": "[HFT 66]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-28": [{ "name": "[HFT 67]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-29": [{ "name": "[HFT 68]", "syllabus": "PYQ Based Topic Test" }],
+    "2026-12-30": [{ "name": "[HFT 69]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-01": [{ "name": "[HFT 71]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-02": [{ "name": "[HFT 72]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-04": [{ "name": "[HFT 73]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-05": [{ "name": "[HFT 74]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-07": [{ "name": "[HFT 76]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-09": [{ "name": "[HFT 78]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-11": [{ "name": "[HFT 79]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-13": [{ "name": "[HFT 81]", "syllabus": "PYQ Based Topic Test" }],
+    "2027-01-16": [{ "name": "[HFT 84]", "syllabus": "PYQ Based Topic Test" }]
 };
 
 // --- State Management ---
@@ -1022,7 +1126,7 @@ function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&
 function parseFirstNumber(text){ const m=String(text??"").replace(/,/g,"").match(/-?\d+(?:\.\d+)?/); return m?Number(m[0]):0; }
 function formatNum(n){ return Number.isInteger(n)?String(n):Number(n).toFixed(1).replace(/\.0$/,""); }
 function autoResize(el){ if(!el)return; el.style.height="auto"; el.style.height=Math.max(36,el.scrollHeight)+"px"; }
-function subjectClass(name){ if(name.includes("QAPT"))return"qapt"; if(name.includes("QFT"))return"qft"; if(name.includes("2026"))return"main"; return""; }
+function subjectClass(name){ if(name.includes("HFT"))return"hft"; if(name.includes("QAPT"))return"qapt"; if(name.includes("QFT"))return"qft"; if(name.includes("2026"))return"main"; return""; }
 
 function renderTagBits(text){
     const parts=String(text??"").split(/(\[PHY\]|\[CHEM\]|#MATH|#PHY|#CHEM)/gi);
