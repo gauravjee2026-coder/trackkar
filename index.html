@@ -3053,11 +3053,6 @@ const SyncManager = {
         this.state = 'local_saved';
         this.hasUnsyncedChanges = true;
         this.updateUI();
-        this.syncTimer = setTimeout(() => {
-            this.state = 'saving';
-            this.updateUI();
-            this.performSync();
-        }, 3000);
     },
 
     forceSync() {
@@ -3158,7 +3153,7 @@ const SyncManager = {
     }
 };
 
-window.addEventListener('online', () => SyncManager.forceSync());
+window.addEventListener('online', () => SyncManager.updateUI());
 window.addEventListener('offline', () => SyncManager.updateUI());
 
 // --- Backup & Restore (Custom Modal) ---
