@@ -588,9 +588,223 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
     .bento-well, .table-bento-outer, .view-section { padding: 10px 12px; }
     .targets, .goals-stats-grid { grid-template-columns: 1fr; }
 }
+
+/* ===================== Motion & Depth Layer ===================== */
+:root {
+    --glow: rgba(217, 83, 56, 0.55);
+    --glow-soft: rgba(217, 83, 56, 0.075);
+    --dot-hot: rgba(217, 83, 56, 0.6);
+    --float-shadow: rgba(23, 27, 31, 0.13);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+html[data-theme="dark"] {
+    --glow: rgba(217, 115, 91, 0.7);
+    --glow-soft: rgba(217, 115, 91, 0.12);
+    --dot-hot: rgba(217, 115, 91, 0.75);
+    --float-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Cards: stacking context so light sits behind content */
+.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col {
+    position: relative;
+    isolation: isolate;
+}
+
+/* Topbar scroll depth */
+.topbar { transition: box-shadow 0.3s ease, background-color 0.3s ease; }
+.topbar.scrolled {
+    -webkit-backdrop-filter: blur(26px) saturate(1.5);
+    backdrop-filter: blur(26px) saturate(1.5);
+    box-shadow: 0 12px 32px -14px rgba(23, 27, 31, 0.28);
+}
+html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.7); }
+
+/* Floating telemetry numbers */
+.big-metric, .days, .next-name { text-shadow: 0 10px 20px var(--float-shadow); will-change: transform; }
+
+/* Hairline ignition */
+.hairline-section::before, .hairline-section::after {
+    background: radial-gradient(240px circle at var(--hx, -999px) 50%, var(--glow), transparent 70%), var(--line);
+}
+.cal-header { position: relative; }
+.cal-header::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none;
+    background: radial-gradient(220px circle at var(--hx, -999px) 50%, var(--glow), transparent 70%);
+}
+
+/* Layered entrance */
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.965); filter: blur(7px); }
+    to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.view-section.entering :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col) {
+    animation: cardIn 0.75s var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+/* Pencil-draw strike-through for finished tasks */
+.todo-text {
+    display: inline;
+    background-image: linear-gradient(transparent calc(50% - 0.75px), currentColor calc(50% - 0.75px), currentColor calc(50% + 0.75px), transparent calc(50% + 0.75px));
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+}
+.todo-row.done .todo-text { text-decoration: none; background-size: 100% 100%; }
+@keyframes strikeDraw { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+@keyframes checkPop { 0% { transform: scale(1); } 45% { transform: scale(1.28); } 100% { transform: scale(1); } }
+.todo-row.strike-draw .todo-text { animation: strikeDraw 0.5s var(--ease-out) both; }
+.todo-row.strike-draw .todo-check { animation: checkPop 0.38s var(--ease-out); }
+
+/* Drag & drop (Week Planner) */
+.todo-row[draggable="true"] { cursor: grab; }
+.todo-row[draggable="true"]:active { cursor: grabbing; }
+.todo-row.dragging { opacity: 0.4; transform: scale(0.98); border-color: var(--accent-cobalt); }
+.kanban-col.drag-over { border-color: var(--accent-cobalt); background: var(--bg-surface-hover); }
+
+/* Pointer-driven effects (mouse / trackpad only) */
+@media (hover: hover) and (pointer: fine) {
+    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col)::before {
+        content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+        opacity: 0; transition: opacity 0.35s ease;
+        background: radial-gradient(440px circle at var(--mx, 50%) var(--my, 50%), var(--glow-soft), transparent 65%);
+    }
+    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col)::after {
+        content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 2;
+        opacity: 0; transition: opacity 0.35s ease;
+        background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 70%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask-composite: exclude;
+    }
+    .remaining-card::after, .countdown-card::after { inset: 0; }
+    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col):hover::before,
+    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col):hover::after { opacity: 1; }
+    .countdown-card::before { background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), var(--glow-soft), transparent 70%); }
+
+    /* 3D tilt */
+    .countdown-card {
+        transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+        transition: transform 0.6s var(--ease-out);
+    }
+    .countdown-card.tilting { transition: transform 0.08s linear; will-change: transform; }
+
+    /* Dot-grid spotlight + drift */
+    .dot-frame { background-position: var(--dx, 0px) var(--dy, 0px); }
+    .pattern-gutter { position: relative; background-position: 0 var(--dy, 0px); }
+    .dot-frame::before, .pattern-gutter::before {
+        content: ""; display: none; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+        background-image: radial-gradient(var(--dot-hot) 1px, transparent 1px);
+        -webkit-mask-image: radial-gradient(140px circle at var(--gx, -999px) var(--gy, -999px), #000, transparent);
+        mask-image: radial-gradient(140px circle at var(--gx, -999px) var(--gy, -999px), #000, transparent);
+    }
+    .dot-frame::before { background-size: 8px 8px; background-position: var(--dx, 0px) var(--dy, 0px); }
+    .pattern-gutter::before { background-size: 12px 12px; background-attachment: fixed; background-position: 0 var(--dy, 0px); }
+    .dot-frame.lit::before, .pattern-gutter.lit::before { display: block; }
+
+    /* Magnetic buttons */
+    .magnetic {
+        transform: translate(var(--tx, 0px), var(--ty, 0px));
+        transition: transform 0.22s var(--ease-out), background-color 0.15s ease, color 0.15s ease,
+                    border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+    .action-btn.magnetic:hover { transform: translate(var(--tx, 0px), calc(var(--ty, 0px) - 0.5px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .view-section.entering :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col) { animation: none; }
+    .todo-row.strike-draw .todo-text, .todo-row.strike-draw .todo-check { animation: none; }
+    .countdown-card { transform: none !important; }
+    .magnetic { transform: none !important; }
+    .big-metric, .days, .next-name { transform: none !important; }
+}
+
+/* ===================== Data Visuals: Rings, Dots, Ribbon, Now-line ===================== */
+/* Activity rings */
+.rings-card {
+    display: flex; align-items: center; gap: 20px; padding: 14px 18px; margin-bottom: 16px;
+    border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg-surface-elevated);
+}
+.rings-svg { width: 108px; height: 108px; flex: none; }
+.ring-track { fill: none; stroke: var(--line); stroke-width: 9; }
+.ring-bar {
+    fill: none; stroke-width: 9; stroke-linecap: round;
+    transition: stroke-dashoffset 0.9s var(--ease-out, ease), opacity 0.3s ease, filter 0.4s ease;
+}
+.ring-q { stroke: var(--accent-emerald); color: var(--accent-emerald); stroke-dasharray: 314.159; stroke-dashoffset: 314.159; }
+.ring-h { stroke: var(--accent-cobalt); color: var(--accent-cobalt); stroke-dasharray: 226.195; stroke-dashoffset: 226.195; }
+.ring-bar.empty { opacity: 0; }
+.ring-bar.closed { filter: drop-shadow(0 0 4px currentColor); }
+.rings-legend { display: flex; flex-direction: column; gap: 12px; min-width: 0; flex: 1; }
+.ring-legend-row { display: flex; flex-direction: column; gap: 2px; }
+.ring-legend-label {
+    display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-tertiary);
+}
+.ring-legend-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-emerald); }
+.ring-legend-row.h .ring-legend-label::before { background: var(--accent-cobalt); }
+.ring-legend-val { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.ring-legend-val small { font-size: 11px; font-weight: 500; color: var(--text-tertiary); margin-left: 6px; }
+.ring-legend-val.done { color: var(--accent-emerald); }
+.head-metrics { display: inline-flex; align-items: center; gap: 8px; }
+.mini-rings { width: 30px; height: 30px; flex: none; }
+.mini-rings .ring-track { stroke-width: 5; }
+.mini-rings .ring-bar { stroke-width: 5; transition: none; }
+
+/* Calendar subject dots */
+.cal-subj-dots { display: flex; gap: 5px; align-items: center; padding: 2px 1px; }
+.cal-subj-dot { width: 9px; height: 9px; border-radius: 50%; border: 2px solid currentColor; background: transparent; box-sizing: border-box; }
+.cal-subj-dot.full { background: currentColor; }
+.cal-subj-dot.phy { color: var(--accent-cobalt); }
+.cal-subj-dot.chem { color: var(--accent-plum); }
+.cal-subj-dot.math { color: var(--accent-amber); }
+.cal-legend {
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed var(--line); font-family: var(--mono); font-size: 10.5px; color: var(--text-tertiary);
+    letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.cal-legend .cal-subj-dot { display: inline-block; }
+
+/* Week progress ribbon */
+.week-ribbon {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 120; pointer-events: none;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / 7 - 1px), var(--line-strong) calc(100% / 7 - 1px), var(--line-strong) calc(100% / 7));
+}
+.week-ribbon.hidden { display: none; }
+.week-ribbon > span {
+    display: block; height: 100%; width: 0; border-radius: 0 3px 3px 0;
+    background: linear-gradient(90deg, var(--accent-terracotta), var(--accent-amber));
+    box-shadow: 0 0 10px var(--glow, rgba(217, 83, 56, 0.5));
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Current-time line in Daily Timeline */
+.timeblock-list { position: relative; }
+.timeblock-slot { transition: opacity 0.3s ease; }
+.timeblock-slot.past { opacity: 0.45; }
+.now-line { position: absolute; left: 0; right: 0; height: 0; z-index: 3; pointer-events: none; border-top: 2px solid var(--accent-terracotta); }
+.now-line .now-dot {
+    position: absolute; left: 58px; top: -6px; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent-terracotta); box-shadow: 0 0 0 0 var(--accent-terracotta-soft);
+    animation: nowPulse 2s ease-out infinite;
+}
+.now-line .now-time {
+    position: absolute; right: 0; top: -17px; padding: 1px 5px; border-radius: 4px; background: var(--accent-terracotta);
+    color: #fff; font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em;
+}
+@keyframes nowPulse {
+    0% { box-shadow: 0 0 0 0 rgba(217, 83, 56, 0.45); }
+    100% { box-shadow: 0 0 0 9px rgba(217, 83, 56, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ring-bar, .week-ribbon > span, .timeblock-slot { transition: none; }
+    .now-line .now-dot { animation: none; }
+}
 </style>
 </head>
 <body>
+<div class="week-ribbon hidden" id="weekRibbon" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span id="weekRibbonFill"></span></div>
 <div class="layout-frame">
     <div class="pattern-gutter" aria-hidden="true"></div>
 
@@ -781,6 +995,19 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
                                 </div>
                             </div>
 
+                            <div class="rings-card" id="cockpitRings">
+                                <svg class="rings-svg" viewBox="0 0 120 120" aria-hidden="true">
+                                    <circle class="ring-track" cx="60" cy="60" r="50"/>
+                                    <circle class="ring-bar ring-q empty" id="ringQ" cx="60" cy="60" r="50" transform="rotate(-90 60 60)"/>
+                                    <circle class="ring-track" cx="60" cy="60" r="36"/>
+                                    <circle class="ring-bar ring-h empty" id="ringH" cx="60" cy="60" r="36" transform="rotate(-90 60 60)"/>
+                                </svg>
+                                <div class="rings-legend">
+                                    <div class="ring-legend-row q"><span class="ring-legend-label">Questions</span><span class="ring-legend-val" id="ringQVal">0 / 100</span></div>
+                                    <div class="ring-legend-row h"><span class="ring-legend-label">Study Hours</span><span class="ring-legend-val" id="ringHVal">0 / 10h</span></div>
+                                </div>
+                            </div>
+
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
                                 <div class="target-item">
                                     <span class="target-label">Questions Solved</span>
@@ -921,6 +1148,12 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
                             <div class="cal-grid">
                                 <div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div>
                                 <div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div><div class="cal-day-head">Sun</div>
+                            </div>
+                            <div class="cal-legend">
+                                <span><i class="cal-subj-dot phy full"></i> Physics</span>
+                                <span><i class="cal-subj-dot chem full"></i> Chemistry</span>
+                                <span><i class="cal-subj-dot math full"></i> Maths</span>
+                                <span><i class="cal-subj-dot phy"></i> Filled = all done · Ring = pending</span>
                             </div>
                         </div>
                         <div id="cal-agenda-view"></div>
@@ -1644,6 +1877,7 @@ const Cockpit = {
     saveMetric(field, val) {
         persistField(this.activeDate, field, val);
         updateLiveMetrics();
+        updateCockpitRings();
     },
     saveDiary(val) {
         persistField(this.activeDate, 'diary', val);
@@ -1745,6 +1979,9 @@ const Cockpit = {
                 </div>
             `;
         }).join("");
+
+        updateCockpitRings();
+        updateNowLine();
     }
 };
 
@@ -1770,7 +2007,7 @@ const Planner = {
         document.getElementById('plannerWeekHeading').textContent = `Week ${20 - currentWeek} · ${fmtDate(week.start)} – ${fmtDate(week.end)}`;
 
         let html = `
-            <div class="kanban-col inbox-col">
+            <div class="kanban-col inbox-col" ondragover="Planner.allowDrop(event)" ondragleave="Planner.dragLeave(event)" ondrop="Planner.drop(event, 'inbox')">
                 <div class="kanban-col-head">
                     <span style="font-family:var(--mono); font-weight:700; font-size:12px;">📥 UNIVERSAL INBOX</span>
                     <span class="today-tag">${targetState.inbox.length}</span>
@@ -1781,7 +2018,7 @@ const Planner = {
                 </div>
                 <div class="todo-list">
                     ${targetState.inbox.map((item, idx) => `
-                        <div class="todo-row">
+                        <div class="todo-row" draggable="true" ondragstart="Planner.drag(event, 'inbox:${idx}')" ondragend="Planner.dragEnd(event)">
                             <div class="todo-content">
                                 <div class="todo-text">${esc(item.text)}</div>
                                 <div class="todo-tags">
@@ -1806,13 +2043,13 @@ const Planner = {
             const hNum = parseFirstNumber(day.hours);
 
             html += `
-                <div class="kanban-col ${key === today ? 'today-col' : ''}">
+                <div class="kanban-col ${key === today ? 'today-col' : ''}" ondragover="Planner.allowDrop(event)" ondragleave="Planner.dragLeave(event)" ondrop="Planner.drop(event, '${key}')">
                     <div class="kanban-col-head">
                         <div style="cursor:pointer;" onclick="Cockpit.openForDate('${key}')" title="Open ${fmtDate(key)} in Today Cockpit">
                             <div style="font-family:var(--serif); font-size:20px; font-weight:600;">${fmtDate(key)}</div>
                             <div style="font-family:var(--mono); font-size:10px; color:var(--text-tertiary); text-transform:uppercase;">${weekday} ${key === today ? '· TODAY' : ''}</div>
                         </div>
-                        <span class="today-tag">${qNum}Q · ${hNum}H</span>
+                        <span class="head-metrics">${miniRings(qNum, hNum)}<span class="today-tag">${qNum}Q · ${hNum}H</span></span>
                     </div>
                     ${tests.map(t => `<div class="cal-event-test">📝 ${esc(t.name)}</div>`).join("")}
                     <div class="todo-composer">
@@ -1821,7 +2058,7 @@ const Planner = {
                     </div>
                     <div class="todo-list">
                         ${todos.map((it, ii) => `
-                            <div class="todo-row ${it.done ? 'done' : ''}">
+                            <div class="todo-row ${it.done ? 'done' : ''}" draggable="true" ondragstart="Planner.drag(event, '${key}:${ii}')" ondragend="Planner.dragEnd(event)">
                                 <input class="todo-check" type="checkbox" data-todo-toggle="${key}:${ii}" ${it.done ? 'checked' : ''}>
                                 <div class="todo-content">
                                     <div class="todo-text">${esc(it.text)}</div>
@@ -2260,6 +2497,7 @@ const Calendar = {
                     const doneCount = dayData.todos.filter(t => t.done).length;
                     const total = dayData.todos.length;
                     html += `<div class="cal-event-todo ${doneCount===total?'done':''}">${doneCount}/${total} Tasks</div>`;
+                    html += subjectDotsHtml(dayData.todos);
                 }
 
                 if(dayData && dayData.hours && parseFirstNumber(dayData.hours) >= 8) {
@@ -2847,6 +3085,347 @@ currentWeek = initialWeek !== -1 ? initialWeek : 0;
 refreshActiveViews();
 setInterval(updateLiveMetrics, 30000);
 SyncManager.updateUI();
+// ===================== Data Visuals: Rings, Subject Dots, Week Ribbon, Now-line =====================
+function setRing(el, pct, circumference) {
+    if (!el) return;
+    const p = Math.max(0, Math.min(1, pct));
+    el.style.strokeDashoffset = (circumference * (1 - p)).toFixed(2);
+    el.classList.toggle('empty', p <= 0);
+    el.classList.toggle('closed', pct >= 1);
+}
+
+function updateCockpitRings() {
+    const q = document.getElementById('ringQ'), h = document.getElementById('ringH');
+    if (!q || !h) return;
+    const day = getDay(Cockpit.activeDate);
+    const qv = parseFirstNumber(day.qs), hv = parseFirstNumber(day.hours);
+    const qt = targetState.qs || 100, ht = targetState.hours || 10;
+    const qp = qt ? qv / qt : 0, hp = ht ? hv / ht : 0;
+    setRing(q, qp, 2 * Math.PI * 50);
+    setRing(h, hp, 2 * Math.PI * 36);
+    const qEl = document.getElementById('ringQVal'), hEl = document.getElementById('ringHVal');
+    if (qEl) {
+        qEl.innerHTML = `${formatNum(qv)} / ${formatNum(qt)}<small>${Math.round(qp * 100)}%</small>`;
+        qEl.classList.toggle('done', qp >= 1);
+    }
+    if (hEl) {
+        hEl.innerHTML = `${formatNum(hv)} / ${formatNum(ht)}h<small>${Math.round(hp * 100)}%</small>`;
+        hEl.classList.toggle('done', hp >= 1);
+    }
+}
+
+function miniRings(qv, hv) {
+    const qt = targetState.qs || 100, ht = targetState.hours || 10;
+    const cO = 2 * Math.PI * 18, cI = 2 * Math.PI * 12;
+    const qp = Math.max(0, Math.min(1, qt ? qv / qt : 0)), hp = Math.max(0, Math.min(1, ht ? hv / ht : 0));
+    return `<svg class="mini-rings" viewBox="0 0 44 44" role="img" aria-label="${qv} of ${qt} questions, ${hv} of ${ht} hours">
+        <circle class="ring-track" cx="22" cy="22" r="18"/>
+        <circle class="ring-bar ring-q${qp <= 0 ? ' empty' : ''}${qv >= qt ? ' closed' : ''}" cx="22" cy="22" r="18" transform="rotate(-90 22 22)" style="stroke-dasharray:${cO.toFixed(2)};stroke-dashoffset:${(cO * (1 - qp)).toFixed(2)}"/>
+        <circle class="ring-track" cx="22" cy="22" r="12"/>
+        <circle class="ring-bar ring-h${hp <= 0 ? ' empty' : ''}${hv >= ht ? ' closed' : ''}" cx="22" cy="22" r="12" transform="rotate(-90 22 22)" style="stroke-dasharray:${cI.toFixed(2)};stroke-dashoffset:${(cI * (1 - hp)).toFixed(2)}"/>
+    </svg>`;
+}
+
+function subjectDotsHtml(todos) {
+    const defs = [
+        ['phy', 'Physics', /\[PHY\]|#PHY\b/i],
+        ['chem', 'Chemistry', /\[CHEM\]|#CHEM\b/i],
+        ['math', 'Maths', /\[MATH\]|#MATH\b/i]
+    ];
+    let out = '';
+    defs.forEach(([cls, name, re]) => {
+        let n = 0, d = 0;
+        (todos || []).forEach(t => {
+            if (re.test(String(t.text ?? ''))) { n++; if (t.done) d++; }
+        });
+        if (n > 0) out += `<span class="cal-subj-dot ${cls}${d === n ? ' full' : ''}" title="${name}: ${d}/${n} done"></span>`;
+    });
+    return out ? `<div class="cal-subj-dots">${out}</div>` : '';
+}
+
+// Seconds since midnight, India time
+function istSeconds() {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(new Date());
+    const o = Object.fromEntries(parts.map(p => [p.type, p.value]));
+    return (Number(o.hour) % 24) * 3600 + Number(o.minute) * 60 + Number(o.second);
+}
+
+function updateWeekRibbon() {
+    const el = document.getElementById('weekRibbon');
+    const fill = document.getElementById('weekRibbonFill');
+    if (!el || !fill) return;
+    const today = getIndiaToday();
+    const idx = weeks.findIndex(w => today >= w.start && today <= w.end);
+    if (idx === -1) { el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+    const elapsed = daysBetween(weeks[idx].start, today) * 86400 + istSeconds();
+    const pct = Math.max(0, Math.min(100, elapsed / (7 * 86400) * 100));
+    fill.style.width = pct.toFixed(2) + '%';
+    el.setAttribute('aria-valuenow', Math.round(pct));
+    el.setAttribute('aria-label', `Week ${20 - idx}: ${Math.round(pct)}% elapsed`);
+}
+
+function updateNowLine() {
+    const list = document.getElementById('cockpitTimeblockList');
+    if (!list) return;
+    list.querySelectorAll('.now-line').forEach(n => n.remove());
+    const slots = list.querySelectorAll('.timeblock-slot');
+    const today = getIndiaToday();
+    const active = Cockpit.activeDate;
+    const secs = istSeconds();
+    const curHour = Math.floor(secs / 3600);
+    slots.forEach((slot, i) => {
+        const hour = 6 + i;
+        slot.classList.toggle('past', active < today || (active === today && hour < curHour));
+    });
+    if (active !== today || curHour < 6 || curHour > 22 || !slots.length) return;
+    const slot = slots[curHour - 6];
+    if (!slot) return;
+    const frac = (secs % 3600) / 3600;
+    const line = document.createElement('div');
+    line.className = 'now-line';
+    line.style.top = (slot.offsetTop + slot.offsetHeight * frac).toFixed(1) + 'px';
+    const mm = Math.floor((secs % 3600) / 60);
+    line.innerHTML = `<span class="now-time">${pad(curHour)}:${pad(mm)}</span><span class="now-dot"></span>`;
+    list.appendChild(line);
+    if (!list._nowScrolled || list._nowScrolledFor !== active) {
+        list.scrollTop = Math.max(0, line.offsetTop - 140);
+        list._nowScrolled = true;
+        list._nowScrolledFor = active;
+    }
+}
+
+updateWeekRibbon();
+updateCockpitRings();
+updateNowLine();
+setInterval(() => { updateWeekRibbon(); if (currentView === 'cockpit') updateNowLine(); }, 30000);
+
+// ===================== Motion & Depth Layer =====================
+(function () {
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const CARD_SEL = '.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col';
+    const MAG_SEL = '.tab-btn, .utility-wrap .action-btn:not(.secondary)';
+    const topbar = document.querySelector('.topbar');
+
+    // --- Layered entrance on view change ---
+    function enter(sec) {
+        if (reduce || !sec) return;
+        sec.querySelectorAll(CARD_SEL).forEach((c, i) => c.style.setProperty('--i', Math.min(i, 12)));
+        sec.classList.remove('entering');
+        void sec.offsetWidth;
+        sec.classList.add('entering');
+        clearTimeout(sec._enterTimer);
+        sec._enterTimer = setTimeout(() => sec.classList.remove('entering'), 1500);
+    }
+    const _switchMainView = window.switchMainView;
+    window.switchMainView = function (view) {
+        const same = currentView === view;
+        _switchMainView(view);
+        if (!same) enter(document.getElementById('view-' + view));
+    };
+
+    // --- Pencil-draw strike on task completion ---
+    const _updateTodo = window.updateTodo;
+    window.updateTodo = function (key, index, done) {
+        _updateTodo(key, index, done);
+        if (!done || reduce) return;
+        document.querySelectorAll('[data-todo-toggle="' + key + ':' + index + '"]').forEach(cb => {
+            const row = cb.closest('.todo-row');
+            if (!row) return;
+            row.classList.add('strike-draw');
+            setTimeout(() => row.classList.remove('strike-draw'), 800);
+        });
+    };
+
+    // --- Scroll depth: topbar state ---
+    let scrollY = 0;
+    function onScroll() {
+        scrollY = window.scrollY || 0;
+        if (topbar) topbar.classList.toggle('scrolled', scrollY > 8);
+        if (fine && !reduce) schedule();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // --- Planner drag & drop ---
+    Object.assign(Planner, {
+        drag(ev, sourceId) {
+            ev.dataTransfer.setData('text/plain', sourceId);
+            ev.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => ev.target.classList.add('dragging'), 0);
+        },
+        dragEnd(ev) {
+            ev.target.classList.remove('dragging');
+            document.querySelectorAll('.kanban-col').forEach(col => col.classList.remove('drag-over'));
+        },
+        allowDrop(ev) {
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = 'move';
+            ev.currentTarget.classList.add('drag-over');
+        },
+        dragLeave(ev) { ev.currentTarget.classList.remove('drag-over'); },
+        drop(ev, destId) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            const sourceId = ev.dataTransfer.getData('text/plain');
+            if (!sourceId) return;
+            const [sourceCol, sourceIdx] = sourceId.split(':');
+            let taskObj = null;
+            if (sourceCol === 'inbox') {
+                taskObj = targetState.inbox.splice(Number(sourceIdx), 1)[0];
+                saveTargets();
+            } else {
+                const d = getDay(sourceCol);
+                taskObj = d.todos.splice(Number(sourceIdx), 1)[0];
+                d._lastModified = Date.now();
+                writeJSON(STORAGE.dayPrefix + sourceCol, d);
+            }
+            if (!taskObj) return;
+            if (destId === 'inbox') {
+                targetState.inbox.push(taskObj);
+                saveTargets();
+            } else {
+                const d = getDay(destId);
+                d.todos.push(taskObj);
+                d._lastModified = Date.now();
+                writeJSON(STORAGE.dayPrefix + destId, d);
+            }
+            SyncManager.hasUnsyncedChanges = true;
+            SyncManager.queueSync();
+            refreshActiveViews();
+        }
+    });
+
+    // --- Pointer effects (mouse / trackpad only) ---
+    let schedule = function () {};
+    if (fine && !reduce) {
+        let px = -9999, py = -9999, tx = 0, ty = 0, cx = 0, cy = 0;
+        let lastTarget = null, lastCard = null, raf = 0, inside = false;
+        const mags = Array.from(document.querySelectorAll(MAG_SEL));
+        mags.forEach(m => { m.classList.add('magnetic'); m._tx = 0; m._ty = 0; });
+
+        schedule = function () { if (!raf) raf = requestAnimationFrame(frame); };
+
+        window.addEventListener('pointermove', e => {
+            if (e.pointerType === 'touch') return;
+            px = e.clientX; py = e.clientY; inside = true;
+            tx = px / window.innerWidth * 2 - 1;
+            ty = py / window.innerHeight * 2 - 1;
+            lastTarget = e.target;
+            schedule();
+        }, { passive: true });
+        document.documentElement.addEventListener('mouseleave', () => {
+            px = py = -9999; tx = ty = 0; inside = false; lastTarget = null; schedule();
+        });
+
+        // Cache the elements and create empty arrays for measurements outside the animation loop
+        const dotEls = Array.from(document.querySelectorAll('.dot-frame, .pattern-gutter'));
+        const lineEls = Array.from(document.querySelectorAll('.hairline-section, .cal-header'));
+        let dotRects = [], lineRects = [], magRects = [];
+
+        // Create a function that measures the screen ONLY when the layout actually changes
+        function measureLayout() {
+            dotRects = dotEls.map(el => el.getBoundingClientRect());
+            lineRects = lineEls.map(el => el.getBoundingClientRect());
+            magRects = mags.map(m => m.getBoundingClientRect());
+        }
+
+        // Run the measurement once at start, and whenever scrolling or resizing the window
+        measureLayout();
+        window.addEventListener('resize', measureLayout, { passive: true });
+        window.addEventListener('scroll', measureLayout, { passive: true });
+        
+        function frame() {
+            raf = 0;
+            // ---- READ phase ----
+            const card = inside && lastTarget && lastTarget.closest ? lastTarget.closest(CARD_SEL) : null;
+            const cardRect = card ? card.getBoundingClientRect() : null;
+
+            // ---- WRITE phase ----
+            // Card spotlight + tilt
+            if (lastCard && lastCard !== card && lastCard.classList.contains('countdown-card')) {
+                lastCard.classList.remove('tilting');
+                lastCard.style.setProperty('--rx', '0deg');
+                lastCard.style.setProperty('--ry', '0deg');
+            }
+            if (card && cardRect) {
+                const x = px - cardRect.left, y = py - cardRect.top;
+                card.style.setProperty('--mx', x + 'px');
+                card.style.setProperty('--my', y + 'px');
+                if (card.classList.contains('countdown-card')) {
+                    card.classList.add('tilting');
+                    card.style.setProperty('--ry', ((x / cardRect.width - 0.5) * 9).toFixed(2) + 'deg');
+                    card.style.setProperty('--rx', (-(y / cardRect.height - 0.5) * 7).toFixed(2) + 'deg');
+                }
+            }
+            lastCard = card;
+
+            // Parallax telemetry
+            cx += (tx - cx) * 0.09;
+            cy += (ty - cy) * 0.09;
+            const settled = Math.abs(tx - cx) < 0.002 && Math.abs(ty - cy) < 0.002;
+            if (settled) { cx = tx; cy = ty; }
+            document.querySelectorAll('.big-metric, .days, .next-name').forEach(el => {
+                const depth = el.classList.contains('days') ? 9 : el.classList.contains('big-metric') ? 6 : 4;
+                el.style.transform = 'translate3d(' + (cx * depth).toFixed(2) + 'px,' + (cy * depth * 0.7).toFixed(2) + 'px,0)';
+            });
+
+            // Dot grid: drift + spotlight
+            const dx = (-cx * 5).toFixed(2) + 'px';
+            const dyFrame = (-cy * 4 - scrollY * 0.12).toFixed(2) + 'px';
+            const dyGutter = (-cy * 5 - scrollY * 0.5).toFixed(2) + 'px';
+            dotEls.forEach((el, i) => {
+                const r = dotRects[i];
+                const isGutter = el.classList.contains('pattern-gutter');
+                if (!isGutter) el.style.setProperty('--dx', dx);
+                el.style.setProperty('--dy', isGutter ? dyGutter : dyFrame);
+                const near = inside && px > r.left - 160 && px < r.right + 160 && py > r.top - 160 && py < r.bottom + 160;
+                if (near) {
+                    el.style.setProperty('--gx', (px - r.left) + 'px');
+                    el.style.setProperty('--gy', (py - r.top) + 'px');
+                }
+                el.classList.toggle('lit', near);
+            });
+
+            // Hairline ignition
+            lineEls.forEach((el, i) => {
+                const r = lineRects[i];
+                let hx = '-999px';
+                if (inside && r.width > 0) {
+                    if (el.classList.contains('hairline-section')) {
+                        if (Math.min(Math.abs(py - r.top), Math.abs(py - r.bottom)) < 90) hx = (px - r.left + window.innerWidth) + 'px';
+                    } else if (Math.abs(py - r.bottom) < 90) {
+                        hx = (px - r.left) + 'px';
+                    }
+                }
+                el.style.setProperty('--hx', hx);
+            });
+
+            // Magnetic buttons
+            mags.forEach((m, i) => {
+                const r = magRects[i];
+                const mcx = r.left + r.width / 2 - m._tx, mcy = r.top + r.height / 2 - m._ty;
+                const ddx = px - mcx, ddy = py - mcy, dist = Math.hypot(ddx, ddy);
+                let nx = 0, ny = 0;
+                if (inside && dist < 110) {
+                    const pull = 1 - dist / 110;
+                    nx = Math.max(-7, Math.min(7, ddx * 0.32 * pull));
+                    ny = Math.max(-5, Math.min(5, ddy * 0.32 * pull));
+                }
+                if (Math.abs(nx - m._tx) > 0.05 || Math.abs(ny - m._ty) > 0.05) {
+                    m._tx = nx; m._ty = ny;
+                    m.style.setProperty('--tx', nx.toFixed(2) + 'px');
+                    m.style.setProperty('--ty', ny.toFixed(2) + 'px');
+                }
+            });
+
+            if (!settled) schedule();
+        }
+    }
+
+    onScroll();
+    enter(document.getElementById('view-cockpit'));
+})();
 </script>
 </body>
 </html>
