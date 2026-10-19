@@ -125,7 +125,7 @@ button { cursor: pointer; }
 .pattern-gutter {
     border-left: 1px solid var(--line); border-right: 1px solid var(--line);
     background-image: radial-gradient(var(--dot-fg) 1px, transparent 1px);
-    background-size: 12px 12px; background-attachment: fixed;
+    background-size: 12px 12px;
 }
 .app { width: 100%; padding: 0 0 80px; position: relative; }
 .shell { width: 100%; margin: 0 auto; }
@@ -145,8 +145,7 @@ button { cursor: pointer; }
 .tw-annotation .accent-cobalt { color: var(--accent-cobalt); font-weight: 600; }
 .topbar {
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; align-items: center;
-    padding: 12px 24px; background: var(--bg-glass); border-bottom: 1px solid var(--line);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    padding: 12px 24px; background: var(--bg-canvas); border-bottom: 1px solid var(--line);
     position: sticky; top: 0; z-index: 100;
 }
 .brand-row { display: flex; align-items: center; gap: 14px; }
@@ -191,15 +190,6 @@ button { cursor: pointer; }
     background: var(--bg-subtle); color: var(--text-tertiary); border: 1px solid var(--line-soft);
 }
 .utility-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.sync-status { display: flex; flex-direction: column; align-items: flex-end; padding-right: 10px; border-right: 1px solid var(--line); }
-.sync-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--text-primary); }
-.sync-dot { width: 7px; height: 7px; border-radius: 50%; transition: 0.3s; }
-.sync-dot.synced { background: var(--accent-emerald); }
-.sync-dot.local_saved { background: var(--accent-cobalt); }
-.sync-dot.saving { background: var(--accent-amber); animation: pulse 1s infinite; }
-.sync-dot.offline { background: var(--text-tertiary); }
-.sync-dot.error { background: var(--accent-crimson); }
-.sync-time { font-family: var(--mono); font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
 .action-btn {
     background: var(--text-primary); color: var(--text-invert); border: 1px solid var(--text-primary);
     border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; letter-spacing: -0.01em;
@@ -211,6 +201,31 @@ button { cursor: pointer; }
 .action-btn.secondary:hover { background: var(--bg-surface-hover); color: var(--text-primary); border-color: var(--text-tertiary); }
 .action-btn.cmd-trigger { background: var(--bg-subtle); color: var(--text-primary); border: 1px solid var(--line-strong); font-weight: 600; }
 .action-btn.icon-only { padding: 6px 9px; }
+.sync-status { display: flex; flex-direction: column; align-items: flex-end; padding-right: 10px; border-right: 1px solid var(--line); }
+.sync-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--text-primary); }
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; transition: 0.3s; }
+.sync-dot.synced { background: var(--accent-emerald); }
+.sync-dot.local_saved { background: var(--accent-cobalt); }
+.sync-dot.saving { background: var(--accent-amber); animation: pulse 1s infinite; }
+.sync-dot.offline { background: var(--text-tertiary); }
+.sync-dot.error { background: var(--accent-crimson); }
+.sync-time { font-family: var(--mono); font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* Syllabus tracker + homework */
+.syl-table-wrap { overflow-x: auto; }
+.syl-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 560px; }
+.syl-table col.c-name { width: 32%; }
+.syl-table col.c-done { width: 76px; }
+.syl-table th { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line-strong); }
+.syl-table td { padding: 8px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.syl-table td.syl-check { text-align: center; padding-top: 12px; }
+.syl-name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); padding-top: 4px; line-height: 1.35; }
+.syl-num { font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); margin-right: 8px; }
+.syl-table tr.done .syl-name { color: var(--text-tertiary); text-decoration: line-through; }
+.syl-table tr.done .syl-num { opacity: 0.6; }
+.cal-event-hw { background: var(--accent-amber-soft); border: 1px solid rgba(184, 107, 20, 0.3); color: var(--accent-amber); font-family: var(--mono); font-size: 9.5px; font-weight: 600; padding: 3px 6px; border-radius: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-event-hw.done { opacity: 0.55; text-decoration: line-through; }
+.hw-list { margin-bottom: 14px; }
 @keyframes pulse { 50% { transform: scale(0.8); opacity: 0.5; } }
 .bento-well { background: var(--bg-well); padding: 12px 20px; }
 .utility-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 14px; }
@@ -368,6 +383,8 @@ thead th + th { border-left: 1px solid var(--line); }
     line-height: 1.45; font-size: 12.5px; font-family: var(--sans); transition: all 0.15s ease;
 }
 .autoarea::placeholder, .cell-area::placeholder, .todo-input::placeholder { color: var(--text-tertiary); }
+.diary-big { width: 100%; height: 560px; min-height: 360px; resize: vertical; display: block; border: 1px solid var(--line); background: var(--bg-surface-elevated); color: var(--text-primary); padding: 12px 14px; border-radius: var(--radius-md); line-height: 1.6; font-size: 13.5px; font-family: var(--sans); transition: border-color 0.15s ease; }
+.diary-big:focus { background: var(--bg-surface); border-color: var(--accent-cobalt); box-shadow: 0 0 0 2px var(--accent-cobalt-soft); }
 .diary-area { min-height: 60px; }
 .todo-input { min-height: 34px; }
 .autoarea:hover, .cell-area:hover, .todo-input:hover { border-color: var(--line-strong); }
@@ -541,7 +558,7 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
 .prefill-btn:hover { background: var(--accent-cobalt); color: #fff; }
 .ms-Draft-list { max-height: 190px; overflow-y: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 8px; background: var(--bg-subtle); display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
 .ms-draft-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px solid var(--line); font-size: 13px; font-weight: 500; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(14, 16, 19, 0.55); backdrop-filter: blur(6px); z-index: 150; display: none; place-items: center; padding: 20px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(14, 16, 19, 0.55); z-index: 150; display: none; place-items: center; padding: 20px; }
 .modal { background: var(--bg-surface); border: 1px solid var(--line-strong); width: 100%; max-width: 520px; border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-lg); }
 .modal h3 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin: 0 0 8px 0; color: var(--text-primary); }
 .modal p { font-size: 13.5px; color: var(--text-secondary); margin: 0 0 20px 0; line-height: 1.5; }
@@ -589,7 +606,7 @@ thead th:nth-last-child(-n+2), tbody td:nth-last-child(-n+2) { text-align: cente
     .targets, .goals-stats-grid { grid-template-columns: 1fr; }
 }
 
-/* ===================== Motion & Depth Layer ===================== */
+/* ===================== Light interaction layer (performance-tuned) ===================== */
 :root {
     --glow: rgba(217, 83, 56, 0.55);
     --glow-soft: rgba(217, 83, 56, 0.075);
@@ -603,44 +620,9 @@ html[data-theme="dark"] {
     --dot-hot: rgba(217, 115, 91, 0.75);
     --float-shadow: rgba(0, 0, 0, 0.5);
 }
-
-/* Cards: stacking context so light sits behind content */
-.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col {
-    position: relative;
-    isolation: isolate;
-}
-
-/* Topbar scroll depth */
-.topbar { transition: box-shadow 0.3s ease, background-color 0.3s ease; }
-.topbar.scrolled {
-    -webkit-backdrop-filter: blur(26px) saturate(1.5);
-    backdrop-filter: blur(26px) saturate(1.5);
-    box-shadow: 0 12px 32px -14px rgba(23, 27, 31, 0.28);
-}
+.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col { position: relative; }
+.topbar.scrolled { box-shadow: 0 12px 32px -14px rgba(23, 27, 31, 0.28); }
 html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.7); }
-
-/* Floating telemetry numbers */
-.big-metric, .days, .next-name { text-shadow: 0 10px 20px var(--float-shadow); will-change: transform; }
-
-/* Hairline ignition */
-.hairline-section::before, .hairline-section::after {
-    background: radial-gradient(240px circle at var(--hx, -999px) 50%, var(--glow), transparent 70%), var(--line);
-}
-.cal-header { position: relative; }
-.cal-header::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none;
-    background: radial-gradient(220px circle at var(--hx, -999px) 50%, var(--glow), transparent 70%);
-}
-
-/* Layered entrance */
-@keyframes cardIn {
-    from { opacity: 0; transform: translateY(16px) scale(0.965); filter: blur(7px); }
-    to   { opacity: 1; transform: none; filter: blur(0); }
-}
-.view-section.entering :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col) {
-    animation: cardIn 0.75s var(--ease-out) backwards;
-    animation-delay: calc(var(--i, 0) * 55ms);
-}
 
 /* Pencil-draw strike-through for finished tasks */
 .todo-text {
@@ -661,62 +643,8 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
 .todo-row.dragging { opacity: 0.4; transform: scale(0.98); border-color: var(--accent-cobalt); }
 .kanban-col.drag-over { border-color: var(--accent-cobalt); background: var(--bg-surface-hover); }
 
-/* Pointer-driven effects (mouse / trackpad only) */
-@media (hover: hover) and (pointer: fine) {
-    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col)::before {
-        content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
-        opacity: 0; transition: opacity 0.35s ease;
-        background: radial-gradient(440px circle at var(--mx, 50%) var(--my, 50%), var(--glow-soft), transparent 65%);
-    }
-    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col)::after {
-        content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 2;
-        opacity: 0; transition: opacity 0.35s ease;
-        background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 70%);
-        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor;
-        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-        mask-composite: exclude;
-    }
-    .remaining-card::after, .countdown-card::after { inset: 0; }
-    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col):hover::before,
-    :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col):hover::after { opacity: 1; }
-    .countdown-card::before { background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), var(--glow-soft), transparent 70%); }
-
-    /* 3D tilt */
-    .countdown-card {
-        transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-        transition: transform 0.6s var(--ease-out);
-    }
-    .countdown-card.tilting { transition: transform 0.08s linear; will-change: transform; }
-
-    /* Dot-grid spotlight + drift */
-    .dot-frame { background-position: var(--dx, 0px) var(--dy, 0px); }
-    .pattern-gutter { position: relative; background-position: 0 var(--dy, 0px); }
-    .dot-frame::before, .pattern-gutter::before {
-        content: ""; display: none; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-        background-image: radial-gradient(var(--dot-hot) 1px, transparent 1px);
-        -webkit-mask-image: radial-gradient(140px circle at var(--gx, -999px) var(--gy, -999px), #000, transparent);
-        mask-image: radial-gradient(140px circle at var(--gx, -999px) var(--gy, -999px), #000, transparent);
-    }
-    .dot-frame::before { background-size: 8px 8px; background-position: var(--dx, 0px) var(--dy, 0px); }
-    .pattern-gutter::before { background-size: 12px 12px; background-attachment: fixed; background-position: 0 var(--dy, 0px); }
-    .dot-frame.lit::before, .pattern-gutter.lit::before { display: block; }
-
-    /* Magnetic buttons */
-    .magnetic {
-        transform: translate(var(--tx, 0px), var(--ty, 0px));
-        transition: transform 0.22s var(--ease-out), background-color 0.15s ease, color 0.15s ease,
-                    border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-    }
-    .action-btn.magnetic:hover { transform: translate(var(--tx, 0px), calc(var(--ty, 0px) - 0.5px)); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .view-section.entering :is(.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col) { animation: none; }
     .todo-row.strike-draw .todo-text, .todo-row.strike-draw .todo-check { animation: none; }
-    .countdown-card { transform: none !important; }
-    .magnetic { transform: none !important; }
-    .big-metric, .days, .next-name { transform: none !important; }
 }
 
 /* ===================== Data Visuals: Rings, Dots, Ribbon, Now-line ===================== */
@@ -843,11 +771,14 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                     <button class="tab-btn" onclick="switchMainView('syllabus')" id="tab-syllabus">
                         Tests <span class="tab-kbd">4</span>
                     </button>
+                    <button class="tab-btn" onclick="switchMainView('chapters')" id="tab-chapters">
+                        Syllabus <span class="tab-kbd">5</span>
+                    </button>
                     <button class="tab-btn" onclick="switchMainView('calendar')" id="tab-calendar">
-                        Calendar <span class="tab-kbd">5</span>
+                        Calendar <span class="tab-kbd">6</span>
                     </button>
                     <button class="tab-btn" onclick="switchMainView('momentum')" id="tab-momentum">
-                        Momentum <span class="tab-kbd">6</span>
+                        Momentum <span class="tab-kbd">7</span>
                     </button>
                 </div>
 
@@ -867,7 +798,7 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                     <button class="action-btn secondary" onclick="exportData('AceGenie_ManualBackup')">Backup</button>
                     <button class="action-btn secondary" onclick="document.getElementById('importFile').click()">Restore</button>
                     <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
-                    <button class="action-btn" onclick="SyncManager.forceSync()">Sync Now</button>
+                    <button class="action-btn" id="syncBtn" onclick="SyncManager.forceSync()" title="Sync all changes with your Google Sheet">Sync All</button>
                 </div>
             </header>
 
@@ -896,7 +827,7 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                                             <span class="big-metric blue" id="jeeMainsDays">—</span>
                                         </div>
                                         <div class="target-item">
-                                            <span class="target-label">QFTs Start</span>
+                                            <span class="target-label" id="qftLabel">Next Test</span>
                                             <span class="big-metric blue" id="qftDays">—</span>
                                         </div>
                                         <div class="target-item">
@@ -954,6 +885,8 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                         <button class="active" onclick="Cockpit.goToday()">Today</button>
                         <button onclick="Cockpit.shiftDay(1)">Next Day →</button>
                         <button onclick="rolloverOverdueTasks()">↻ Rollover Unfinished (<span id="overdueCountBadge">0</span>)</button>
+                        <button onclick="SyllabusHub.openModal()">+ Test</button>
+                        <button onclick="Homework.openModal()">+ Homework</button>
                     </div>
                 </div>
 
@@ -1026,6 +959,7 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                             </div>
 
                             <div id="cockpitTestsWrap"></div>
+                            <div id="cockpitHomeworkWrap"></div>
 
                             <div class="priority-label">Scheduled Tasks (Tip: add @09:00 or ~1h to time-block)</div>
                             <div class="todo-composer">
@@ -1042,28 +976,20 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                                 <button class="quick-tag-chip" onclick="appendToken('cockpitTodoInput', '@19:00')">@19:00</button>
                             </div>
                             <div class="todo-list" id="cockpitTodoList"></div>
-
-                            <div style="margin-top:18px;">
-                                <div class="priority-label">Daily Diary &amp; Reflection</div>
-                                <textarea rows="3" id="cockpitDiaryArea" class="autoarea cell-area diary-area" placeholder="What went well today? Key physics/chemistry/math takeaways or mistakes to avoid..." oninput="Cockpit.saveDiary(this.value)"></textarea>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Column 3: Time-Blocking Schedule -->
+                    <!-- Column 3: Daily Diary -->
                     <div class="dot-frame">
                         <div class="panel-card">
                             <div class="panel-head">
                                 <div>
-                                    <div class="panel-subtitle">TIME-BLOCKING AGENDA</div>
-                                    <h3 class="panel-title">Daily Timeline</h3>
+                                    <div class="panel-subtitle">DAILY REFLECTION</div>
+                                    <h3 class="panel-title">Daily Diary</h3>
                                 </div>
-                                <span class="today-tag">06:00 – 22:00</span>
+                                <span class="today-tag" id="diaryWordTag">0 words</span>
                             </div>
-                            <p style="font-size:11.5px; color:var(--text-tertiary); margin:0 0 12px;">
-                                Tag any task with <code style="font-family:var(--mono); color:var(--accent-cobalt);">@08:00</code> or <code style="font-family:var(--mono); color:var(--accent-cobalt);">@14:00</code> to slot it into your time-blocked schedule, or click any hour slot below.
-                            </p>
-                            <div class="timeblock-list" id="cockpitTimeblockList"></div>
+                            <textarea id="cockpitDiaryArea" class="diary-big" placeholder="What went well today? Key physics/chemistry/math takeaways or mistakes to avoid..." oninput="Cockpit.saveDiary(this.value)"></textarea>
                         </div>
                     </div>
                 </div>
@@ -1120,13 +1046,55 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                     <div class="filter-pills">
                         <button class="filter-chip active" data-testfilter="ALL" onclick="SyllabusHub.setFilter('ALL')">All Tests</button>
                         <button class="filter-chip" data-testfilter="UPCOMING" onclick="SyllabusHub.setFilter('UPCOMING')">Upcoming Only</button>
+                        <button class="filter-chip" data-testfilter="PAST" onclick="SyllabusHub.setFilter('PAST')">Past</button>
                         <button class="filter-chip" data-testfilter="QPT" onclick="SyllabusHub.setFilter('QPT')">QPT</button>
                         <button class="filter-chip" data-testfilter="QAPT" onclick="SyllabusHub.setFilter('QAPT')">QAPT</button>
                         <button class="filter-chip" data-testfilter="QFT" onclick="SyllabusHub.setFilter('QFT')">QFT</button>
                         <button class="filter-chip" data-testfilter="2026" onclick="SyllabusHub.setFilter('2026')">2026</button>
+                        <button class="action-btn" onclick="SyllabusHub.openModal()" style="padding: 8px 16px; font-size: 12.5px; font-weight: 600; margin-left:6px;"><span>+ SCHEDULE TEST</span></button>
                     </div>
                 </div>
                 <div class="syllabus-grid" id="syllabusCardsContainer"></div>
+            </div>
+
+            <!-- VIEW: SYLLABUS TRACKER -->
+            <div id="view-chapters" class="view-section">
+                <div class="cal-header">
+                    <div>
+                        <div class="panel-subtitle">CHAPTER-BY-CHAPTER CHECKLIST</div>
+                        <div class="cal-title">Syllabus Tracker</div>
+                    </div>
+                    <div class="filter-pills">
+                        <button class="filter-chip active" data-sylsubj="PHY" onclick="SyllabusTracker.setSubject('PHY')">Physics</button>
+                        <button class="filter-chip" data-sylsubj="CHEM" onclick="SyllabusTracker.setSubject('CHEM')">Chemistry</button>
+                        <button class="filter-chip" data-sylsubj="MATH" onclick="SyllabusTracker.setSubject('MATH')">Mathematics</button>
+                    </div>
+                </div>
+                <div class="dot-frame">
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div>
+                                <div class="panel-subtitle" id="sylSubjSub">PHYSICS</div>
+                                <h3 class="panel-title" id="sylSubjTitle">Physics Chapters</h3>
+                            </div>
+                            <span class="today-tag" id="sylCount">0 / 0 done</span>
+                        </div>
+                        <div class="goal-progress-bar"><span id="sylBar" style="width:0%"></span></div>
+                        <div class="filter-pills" style="margin:14px 0 6px;">
+                            <button class="filter-chip active" data-sylview="all" onclick="SyllabusTracker.setView('all')">All</button>
+                            <button class="filter-chip" data-sylview="pending" onclick="SyllabusTracker.setView('pending')">Pending</button>
+                            <button class="filter-chip" data-sylview="done" onclick="SyllabusTracker.setView('done')">Completed</button>
+                        </div>
+                        <div class="syl-table-wrap">
+                            <table class="syl-table">
+                                <colgroup><col class="c-name"><col class="c-done"><col></colgroup>
+                                <thead><tr><th>Chapter Name</th><th style="text-align:center;">Done</th><th>Notes (what's left, what to do)</th></tr></thead>
+                                <tbody id="sylTbody"></tbody>
+                            </table>
+                        </div>
+                        <div class="small-note" id="sylOverall" style="margin-top:12px;"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- VIEW 5: CALENDAR & AGENDA -->
@@ -1240,7 +1208,7 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                 <nav class="pagination-wrap" id="momentumPagination"></nav>
             </div>
 
-            <div class="footer-note">Execution Protocol · Local &amp; Cloud Persistence · Press ⌘K for Quick Capture</div>
+            <div class="footer-note">Execution Protocol · Saved Locally in Your Browser · Press ⌘K for Quick Capture</div>
         </div>
     </div>
 
@@ -1311,18 +1279,6 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
     </div>
 </div>
 
-<!-- Sync Conflict Modal -->
-<div class="modal-overlay" id="conflictModal">
-    <div class="modal">
-        <h3>Sync Conflict</h3>
-        <p>The cloud contains newer data modified from another device. Overwrite local data with the cloud version?</p>
-        <div class="modal-actions">
-            <button class="action-btn secondary" onclick="SyncManager.resolveConflict('local')">Keep Local</button>
-            <button class="action-btn" onclick="SyncManager.resolveConflict('cloud')">Use Cloud</button>
-        </div>
-    </div>
-</div>
-
 <!-- Restore Confirmation Modal -->
 <div class="modal-overlay" id="restoreModal">
     <div class="modal">
@@ -1331,6 +1287,73 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
         <div class="modal-actions">
             <button class="action-btn secondary" onclick="cancelRestore()">Cancel</button>
             <button class="action-btn" onclick="confirmRestore()">Backup &amp; Restore</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Homework / Assignment Modal -->
+<div class="modal-overlay" id="hwModal" onclick="if(event.target===this)Homework.closeModal()">
+    <div class="modal goal-modal">
+        <div class="goal-modal-head">
+            <div class="goal-modal-title">
+                <span style="color:var(--accent-amber); font-size:18px;">✎</span>
+                <span id="hwModalHeading">ADD HOMEWORK</span>
+            </div>
+            <button class="goal-icon-btn" onclick="Homework.closeModal()" style="font-size:16px;">✕</button>
+        </div>
+        <div class="goal-field-label">TITLE</div>
+        <input type="text" id="hwTitleInput" class="goal-input" placeholder="e.g. DPP 5 - Rotational Motion" onkeydown="if(event.key==='Enter'){event.preventDefault();Homework.save();}">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+                <div class="goal-field-label">SUBJECT</div>
+                <select id="hwSubjectInput" class="goal-select">
+                    <option value="PHY">Physics</option>
+                    <option value="CHEM">Chemistry</option>
+                    <option value="MATH">Mathematics</option>
+                    <option value="GEN">General</option>
+                </select>
+            </div>
+            <div>
+                <div class="goal-field-label">DUE DATE</div>
+                <input type="date" id="hwDueInput" class="goal-input">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="action-btn secondary" id="hwDeleteBtn" onclick="Homework.remove()" style="margin-right:auto; display:none;">DELETE</button>
+            <button type="button" class="action-btn secondary" onclick="Homework.closeModal()">CANCEL</button>
+            <button type="button" class="action-btn" onclick="Homework.save()">SAVE</button>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule / Edit Test Modal -->
+<div class="modal-overlay" id="testModal" onclick="if(event.target===this)SyllabusHub.closeModal()">
+    <div class="modal goal-modal">
+        <div class="goal-modal-head">
+            <div class="goal-modal-title">
+                <span style="color:var(--accent-indigo); font-size:18px;">🎯</span>
+                <span id="testModalHeading">SCHEDULE TEST</span>
+            </div>
+            <button class="goal-icon-btn" onclick="SyllabusHub.closeModal()" style="font-size:16px;">✕</button>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 170px; gap: 12px;">
+            <div>
+                <div class="goal-field-label">TEST NAME</div>
+                <input type="text" id="testNameInput" class="goal-input" placeholder="e.g. Weekly Mock 1" onkeydown="if(event.key==='Enter'){event.preventDefault();SyllabusHub.saveTest();}">
+            </div>
+            <div>
+                <div class="goal-field-label">DATE</div>
+                <input type="date" id="testDateInput" class="goal-input">
+            </div>
+        </div>
+        <div class="goal-field-label">SYLLABUS / TOPICS (OPTIONAL)</div>
+        <textarea id="testSyllabusInput" class="goal-input" rows="3" style="resize:vertical;" placeholder="Phy: Kinematics, Laws of Motion | Chem: Mole Concept, Atomic Structure | Math: Sets, Functions"></textarea>
+        <div class="small-note" style="margin:-8px 0 16px; font-size:11.5px; color:var(--text-tertiary);">Tip: separate subjects with <b>|</b> and chapters with commas. Each chapter becomes a tick-off checklist item.</div>
+        <div class="modal-actions">
+            <button type="button" class="action-btn secondary" id="testDeleteBtn" onclick="SyllabusHub.deleteTest()" style="margin-right:auto; display:none;">DELETE</button>
+            <button type="button" class="action-btn secondary" onclick="SyllabusHub.closeModal()">CANCEL</button>
+            <button type="button" class="action-btn" onclick="SyllabusHub.saveTest()">SAVE TEST</button>
         </div>
     </div>
 </div>
@@ -1347,75 +1370,88 @@ const STORAGE = {
     syncData: "executionProtocol:syncMetadata"
 };
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxlvtKZoZqiMWs1cR9cVX-wehi9tquspav1_J8H2MHc015qHMVVwxXchF2xzYo-vufK6w/exec";
-
-const TEST_SCHEDULE = {
-    "2026-09-06": [{ "name": "[QPT 7]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants" }],
-    "2026-09-13": [{ "name": "[QPT 8]", "syllabus": "All Chapters from QPT 5 to QPT 7. PYQS JEE Main Prep Check" }],
-    "2026-09-20": [{ "name": "[QAPT 5]", "syllabus": "Phy: KTG, Thermal Prop., Thermodynamics | Chem: Periodicity, Chemical Bonding | Math: Parabola, Ellipse, Hyperbola" }],
-    "2026-09-23": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-10-11": [{ "name": "[QPT 9]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry" }],
-    "2026-09-29": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-09-27": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-10-04": [{ "name": "[QAPT 6]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants" }],
-    "2026-10-07": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-01": [
-        { "name": "[QPT 10]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" },
-        { "name": "[QAPT 7]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry" }
-    ],
-    "2026-10-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-08": [{ "name": "[QPT 11]", "syllabus": "All Chapters of QPT 9 & 10 PYQS JEE Main Prep Check" }],
-    "2026-10-21": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-15": [
-        { "name": "[QPT 12]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" },
-        { "name": "[QAPT 8]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives" }
-    ],
-    "2026-10-28": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-05": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-22": [
-        { "name": "[QPT 13]", "syllabus": "Phy: EM Induction, Alternating Current | Chem: Biomolecules, Coordination Compounds | Math: Area Under Curves, Differential Equations" },
-        { "name": "[QAPT 9]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration" }
-    ],
-    "2026-11-29": [{ "name": "[QFT 1]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-10-18": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-11-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-01": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-10-25": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-06": [
-        { "name": "[QPT 15]", "syllabus": "Phy: Wave Optics, Ray Optics | Chem: d & f Block, p Block, Practical Chemistry | Math: 3D Geometry, Vector Algebra" },
-        { "name": "[QFT 2]", "syllabus": "JEE Main Full Syllabus" }
-    ],
-    "2026-12-08": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-10": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-12": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-13": [
-        { "name": "[QPT 16]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: General Organic Chemistry, Hydrocarbons | Math: Complex Number, Probability, Statistics" },
-        { "name": "[QFT 3]", "syllabus": "JEE Main Full Syllabus" }
-    ],
-    "2026-12-14": [{ "name": "[2026]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-17": [{ "name": "[QFT 4]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-20": [
-        { "name": "[QAPT 12]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: d & f Block, Coordination Compounds, Practical Chemistry | Math: Complex Number, Probability, Statistics" },
-        { "name": "[QFT 5]", "syllabus": "JEE Main Full Syllabus" }
-    ],
-    "2026-12-24": [{ "name": "[QFT 6]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-27": [{ "name": "[QFT 7]", "syllabus": "JEE Main Full Syllabus" }],
-    "2026-12-31": [{ "name": "[QFT 8]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-03": [{ "name": "[QFT 9]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-06": [{ "name": "[QFT 10]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-08": [{ "name": "[QFT 11]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-10": [{ "name": "[QFT 12]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-12": [{ "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-14": [{ "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus" }],
-    "2027-01-15": [{ "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus" }]
-};
+// Tests are added by the user (Tests tab -> "+ Schedule Test") and stored in targetState.tests.
+// TEST_SCHEDULE is a date-keyed view rebuilt from that list.
+let TEST_SCHEDULE = {};
+function rebuildTestSchedule() {
+    const out = {};
+    const list = Array.isArray(targetState.tests) ? targetState.tests : [];
+    const ord = x => Number.isFinite(Number(x.order)) && x.order !== undefined && x.order !== null ? Number(x.order) : 100;
+    list.slice().sort((x, y) => x.date.localeCompare(y.date) || (ord(x) - ord(y)) || String(x.id).localeCompare(String(y.id))).forEach(t => {
+        if(!t || !t.date) return;
+        (out[t.date] = out[t.date] || []).push({ id: t.id, name: t.name, syllabus: t.syllabus || "" });
+    });
+    TEST_SCHEDULE = out;
+}
 
 // --- State Management ---
 let weeks = [];
 let currentWeek = 0;
 let stateCache = {};
+// Constants used while loading saved data (must be defined before loadTargets() runs).
+const HW_SUBJECTS = { PHY: { label: "Physics", cls: "phy" }, CHEM: { label: "Chemistry", cls: "chem" }, MATH: { label: "Maths", cls: "math" }, GEN: { label: "General", cls: "other" } };
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+// Your original test schedule. Loaded once into the editable test list (Tests tab), then synced like any other data.
+const SEED_VERSION = 1;
+const SEED_TESTS = [
+    {"id": "seed_2026-09-06_0", "date": "2026-09-06", "name": "[QPT 7]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants", "order": 0},
+    {"id": "seed_2026-09-13_0", "date": "2026-09-13", "name": "[QPT 8]", "syllabus": "All Chapters from QPT 5 to QPT 7. PYQS JEE Main Prep Check", "order": 0},
+    {"id": "seed_2026-09-20_0", "date": "2026-09-20", "name": "[QAPT 5]", "syllabus": "Phy: KTG, Thermal Prop., Thermodynamics | Chem: Periodicity, Chemical Bonding | Math: Parabola, Ellipse, Hyperbola", "order": 0},
+    {"id": "seed_2026-09-23_0", "date": "2026-09-23", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-09-27_0", "date": "2026-09-27", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-09-29_0", "date": "2026-09-29", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-04_0", "date": "2026-10-04", "name": "[QAPT 6]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants", "order": 0},
+    {"id": "seed_2026-10-07_0", "date": "2026-10-07", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-11_0", "date": "2026-10-11", "name": "[QPT 9]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry", "order": 0},
+    {"id": "seed_2026-10-14_0", "date": "2026-10-14", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-18_0", "date": "2026-10-18", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-21_0", "date": "2026-10-21", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-25_0", "date": "2026-10-25", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-10-28_0", "date": "2026-10-28", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-11-01_0", "date": "2026-11-01", "name": "[QPT 10]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives", "order": 0},
+    {"id": "seed_2026-11-01_1", "date": "2026-11-01", "name": "[QAPT 7]", "syllabus": "Phy: Electrostatics, Gravitation | Chem: Hydrocarbons, Haloalkanes & Haloarenes | Math: Sets & Relations, Functions, Inverse Trigonometry", "order": 1},
+    {"id": "seed_2026-11-05_0", "date": "2026-11-05", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-11-08_0", "date": "2026-11-08", "name": "[QPT 11]", "syllabus": "All Chapters of QPT 9 & 10 PYQS JEE Main Prep Check", "order": 0},
+    {"id": "seed_2026-11-15_0", "date": "2026-11-15", "name": "[QPT 12]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration", "order": 0},
+    {"id": "seed_2026-11-15_1", "date": "2026-11-15", "name": "[QAPT 8]", "syllabus": "Phy: Capacitance, Current Electricity | Chem: Alcohols Phenols Ethers, Aldehydes & Ketones | Math: Limits, Continuity & Diff., Application of Derivatives", "order": 1},
+    {"id": "seed_2026-11-18_0", "date": "2026-11-18", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-11-22_0", "date": "2026-11-22", "name": "[QPT 13]", "syllabus": "Phy: EM Induction, Alternating Current | Chem: Biomolecules, Coordination Compounds | Math: Area Under Curves, Differential Equations", "order": 0},
+    {"id": "seed_2026-11-22_1", "date": "2026-11-22", "name": "[QAPT 9]", "syllabus": "Phy: Magnetic Effects of Current, Magnetic Prop. of Matter | Chem: Carboxylic Acid Derivatives, Amines | Math: Indefinite Integration, Definite Integration", "order": 1},
+    {"id": "seed_2026-11-25_0", "date": "2026-11-25", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-11-29_0", "date": "2026-11-29", "name": "[QFT 1]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-01_0", "date": "2026-12-01", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-06_0", "date": "2026-12-06", "name": "[QPT 15]", "syllabus": "Phy: Wave Optics, Ray Optics | Chem: d & f Block, p Block, Practical Chemistry | Math: 3D Geometry, Vector Algebra", "order": 0},
+    {"id": "seed_2026-12-06_1", "date": "2026-12-06", "name": "[QFT 2]", "syllabus": "JEE Main Full Syllabus", "order": 1},
+    {"id": "seed_2026-12-08_0", "date": "2026-12-08", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-10_0", "date": "2026-12-10", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-12_0", "date": "2026-12-12", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-13_0", "date": "2026-12-13", "name": "[QPT 16]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: General Organic Chemistry, Hydrocarbons | Math: Complex Number, Probability, Statistics", "order": 0},
+    {"id": "seed_2026-12-13_1", "date": "2026-12-13", "name": "[QFT 3]", "syllabus": "JEE Main Full Syllabus", "order": 1},
+    {"id": "seed_2026-12-14_0", "date": "2026-12-14", "name": "[2026]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-17_0", "date": "2026-12-17", "name": "[QFT 4]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-20_0", "date": "2026-12-20", "name": "[QAPT 12]", "syllabus": "Phy: Waves & Sound, EM Waves, Semiconductors | Chem: d & f Block, Coordination Compounds, Practical Chemistry | Math: Complex Number, Probability, Statistics", "order": 0},
+    {"id": "seed_2026-12-20_1", "date": "2026-12-20", "name": "[QFT 5]", "syllabus": "JEE Main Full Syllabus", "order": 1},
+    {"id": "seed_2026-12-24_0", "date": "2026-12-24", "name": "[QFT 6]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-27_0", "date": "2026-12-27", "name": "[QFT 7]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2026-12-31_0", "date": "2026-12-31", "name": "[QFT 8]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-03_0", "date": "2027-01-03", "name": "[QFT 9]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-06_0", "date": "2027-01-06", "name": "[QFT 10]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-08_0", "date": "2027-01-08", "name": "[QFT 11]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-10_0", "date": "2027-01-10", "name": "[QFT 12]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-12_0", "date": "2027-01-12", "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-14_0", "date": "2027-01-14", "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "seed_2027-01-15_0", "date": "2027-01-15", "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus", "order": 0}
+];
 let targetState = loadTargets();
+(function seedTestsOnce(){
+    if((Number(targetState.seedVersion) || 0) >= SEED_VERSION) return;
+    const have = new Set((targetState.tests || []).map(t => t.id));
+    SEED_TESTS.forEach(t => { if(!have.has(t.id)) targetState.tests.push(Object.assign({}, t)); });
+    targetState.seedVersion = SEED_VERSION;
+    saveTargets({ silent: true });
+})();
+rebuildTestSchedule();
 let flashTimer;
 let activeSubjectFilter = "ALL";
 let pendingRestoreData = null;
@@ -1446,19 +1482,49 @@ function showFlash(msg, isError=false){
 // --- Data Access & Persistence ---
 function readJSON(key,fallback){ try{const x=localStorage.getItem(key); return x?JSON.parse(x):fallback;}catch{return fallback;} }
 function writeJSON(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
-function loadTargets(){
-    const saved = readJSON(STORAGE.targets, { qs: 100, hours: 10, quote: "", inbox: [], testNotes: {}, goals: [], theme: "light" });
+function uid(prefix){ return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function safeId(v, prefix){ return String(v || "").replace(/[^A-Za-z0-9_-]/g, "") || uid(prefix); }
+function cleanTests(a){
+    return (Array.isArray(a) ? a : []).filter(t => t && DATE_RE.test(String(t.date)) && String(t.name || "").trim())
+        .map(t => { const o = { id: safeId(t.id, "test"), name: String(t.name).trim(), date: String(t.date), syllabus: String(t.syllabus || "") }; if(t.order !== undefined && t.order !== null && Number.isFinite(Number(t.order))) o.order = Number(t.order); return o; });
+}
+function cleanHomework(a){
+    return (Array.isArray(a) ? a : []).filter(h => h && DATE_RE.test(String(h.due)) && String(h.title || "").trim())
+        .map(h => ({ id: safeId(h.id, "hw"), title: String(h.title).trim(), subject: HW_SUBJECTS[h.subject] ? h.subject : "GEN", due: String(h.due), done: !!h.done }));
+}
+function cleanSyllabus(o){
+    const out = {};
+    if(!o || typeof o !== "object") return out;
+    Object.keys(o).forEach(k => {
+        if(!/^(PHY|CHEM|MATH):\d+$/.test(k) || !o[k]) return;
+        const done = !!o[k].done, notes = String(o[k].notes || "");
+        if(done || notes) out[k] = { done, notes };
+    });
+    return out;
+}
+function normalizeTargets(saved){
+    const s = (saved && typeof saved === "object" && !Array.isArray(saved)) ? saved : {};
     return {
-        qs: Number(saved.qs) || 100,
-        hours: Number(saved.hours) || 10,
-        quote: saved.quote || "",
-        inbox: Array.isArray(saved.inbox) ? saved.inbox : [],
-        testNotes: saved.testNotes || {},
-        goals: Array.isArray(saved.goals) ? saved.goals : [],
-        theme: saved.theme || "light"
+        schemaVersion: 2,
+        qs: Number(s.qs) || 100,
+        hours: Number(s.hours) || 10,
+        quote: s.quote || "",
+        inbox: Array.isArray(s.inbox) ? s.inbox : [],
+        testNotes: (s.testNotes && typeof s.testNotes === "object") ? s.testNotes : {},
+        goals: Array.isArray(s.goals) ? s.goals : [],
+        tests: cleanTests(s.tests),
+        seedVersion: Number(s.seedVersion) || 0,
+        homework: cleanHomework(s.homework),
+        syllabus: cleanSyllabus(s.syllabus),
+        theme: s.theme === "dark" ? "dark" : "light"
     };
 }
-function saveTargets(){ writeJSON(STORAGE.targets, targetState); }
+function loadTargets(){ return normalizeTargets(readJSON(STORAGE.targets, {})); }
+function saveTargets(opts){
+    writeJSON(STORAGE.targets, targetState);
+    if(opts && opts.silent) return;          // used when applying data FROM the Sheet: must not echo back
+    try { SyncManager.hasUnsyncedChanges = true; SyncManager.queueSync(); } catch(e) { /* before sync engine loads */ }
+}
 
 function getDay(key){
     if(!stateCache[key]){
@@ -1523,156 +1589,381 @@ function applyTheme(theme) {
 function toggleTheme() {
     targetState.theme = targetState.theme === "dark" ? "light" : "dark";
     applyTheme(targetState.theme);
-    saveTargets();
+    saveTargets({ silent: true });
     showFlash(`Switched to ${targetState.theme === "dark" ? "Carbon Dark" : "Warm Paper Light"} theme.`);
 }
 
-// --- Sync Engine ---
+// --- Sync Engine v2 (Google Sheets via Apps Script): incremental, per-record, merge-based ---
+// Every day / goal / test / homework / note / syllabus entry is a separate record.
+// Sync sends only records that changed since this device last synced, receives only
+// records that changed elsewhere, and merges per record (newer change wins).
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxlvtKZoZqiMWs1cR9cVX-wehi9tquspav1_J8H2MHc015qHMVVwxXchF2xzYo-vufK6w/exec";
+const SYNC_TOKEN = "umH4sMwYCq9TE9w6IOySbDNuny_uOzIB";
+const SYNC_BATCH = 150;
+function getSyncUrl(){ return WEB_APP_URL; }
+
+function stableStringify(v){
+    if(v === null || typeof v !== "object") { const j = JSON.stringify(v); return j === undefined ? "null" : j; }
+    if(Array.isArray(v)) return "[" + v.map(stableStringify).join(",") + "]";
+    return "{" + Object.keys(v).filter(k => v[k] !== undefined).sort().map(k => JSON.stringify(k) + ":" + stableStringify(v[k])).join(",") + "}";
+}
+function hashStr(str){
+    let h = 0x811c9dc5;
+    for(let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h.toString(16) + ":" + str.length;
+}
+
+// All syncable data on this device, one entry per record.
+function buildLocalRecords(){
+    const out = {};
+    const add = (type, id, label, obj) => {
+        const payload = stableStringify(obj);
+        out[type + ":" + id] = { key: type + ":" + id, type, id, label: String(label || "").slice(0, 120), payload, hash: hashStr(payload), obj };
+    };
+    add("settings", "main", "Targets & quote", { qs: targetState.qs, hours: targetState.hours, quote: targetState.quote || "" });
+    add("inbox", "main", `Inbox (${(targetState.inbox || []).length} items)`, { items: targetState.inbox || [] });
+    (targetState.goals || []).forEach(g => { if(g && g.id) add("goal", g.id, g.title, g); });
+    (targetState.tests || []).forEach(t => { if(t && t.id) add("test", t.id, `${t.name} (${t.date})`, t); });
+    (targetState.homework || []).forEach(h => { if(h && h.id) add("homework", h.id, `${h.title} (due ${h.due})`, h); });
+    Object.keys(targetState.testNotes || {}).forEach(k => { const v = targetState.testNotes[k]; if(v) add("note", k, `Test note ${k}`, { text: String(v) }); });
+    Object.keys(targetState.syllabus || {}).forEach(k => { const e = targetState.syllabus[k]; add("syllabus", k, `${k}${e.done ? " (done)" : ""}`, e); });
+    for(let i = 0; i < localStorage.length; i++){
+        const lk = localStorage.key(i);
+        if(!lk || !lk.startsWith(STORAGE.dayPrefix)) continue;
+        const dateKey = lk.substring(STORAGE.dayPrefix.length);
+        if(!DATE_RE.test(dateKey)) continue;
+        let day; try { day = JSON.parse(localStorage.getItem(lk)); } catch { continue; }
+        if(!day || typeof day !== "object") continue;
+        add("day", dateKey, String(day.diary || "").replace(/\s+/g, " ").slice(0, 60) || dateKey, day);
+    }
+    return out;
+}
+
+function loadSyncState(){
+    const st = readJSON(STORAGE.syncData, null);
+    if(st && st.v === 2 && st.recs && typeof st.recs === "object") return st;
+    return { v: 2, lastSeq: 0, lastSyncTime: null, done: false, recs: {} };
+}
+function saveSyncState(st){ try { writeJSON(STORAGE.syncData, st); } catch(e) { console.error("Could not save sync state", e); } }
+
+function upsertById(list, id, data, deleted){
+    const i = list.findIndex(x => x && x.id === id);
+    if(deleted){ if(i >= 0) list.splice(i, 1); return; }
+    if(i >= 0) list[i] = data; else list.push(data);
+}
+// Write one record that came from the Sheet into this device. Returns true if local data was touched.
+function applyRecordLocal(rec){
+    const type = rec.key.split(":")[0];
+    const id = rec.key.slice(type.length + 1);
+    let data = null;
+    if(!rec.deleted){ try { data = JSON.parse(rec.payload); } catch { return false; } }
+    switch(type){
+        case "day":
+            if(!DATE_RE.test(id)) return false;
+            delete stateCache[id];
+            if(rec.deleted) localStorage.removeItem(STORAGE.dayPrefix + id); else writeJSON(STORAGE.dayPrefix + id, data);
+            return true;
+        case "settings":
+            if(data){
+                if(data.qs !== undefined) targetState.qs = Number(data.qs) || targetState.qs;
+                if(data.hours !== undefined) targetState.hours = Number(data.hours) || targetState.hours;
+                targetState.quote = String(data.quote || "");
+            }
+            return true;
+        case "inbox":
+            targetState.inbox = (data && Array.isArray(data.items)) ? data.items : [];
+            return true;
+        case "goal":
+            if(!Array.isArray(targetState.goals)) targetState.goals = [];
+            upsertById(targetState.goals, id, data, rec.deleted);
+            targetState.goals.sort((a, b) => (parseInt(String(b.id).replace(/\D/g, ""), 10) || 0) - (parseInt(String(a.id).replace(/\D/g, ""), 10) || 0));
+            return true;
+        case "test":
+            if(!Array.isArray(targetState.tests)) targetState.tests = [];
+            if(data && !DATE_RE.test(String(data.date))) return false;
+            upsertById(targetState.tests, id, data, rec.deleted);
+            return true;
+        case "homework":
+            if(!Array.isArray(targetState.homework)) targetState.homework = [];
+            if(data && !DATE_RE.test(String(data.due))) return false;
+            upsertById(targetState.homework, id, data, rec.deleted);
+            return true;
+        case "note":
+            if(!targetState.testNotes || typeof targetState.testNotes !== "object") targetState.testNotes = {};
+            if(rec.deleted) delete targetState.testNotes[id]; else targetState.testNotes[id] = String((data && data.text) || "");
+            return true;
+        case "syllabus":
+            if(!/^(PHY|CHEM|MATH):\d+$/.test(id)) return false;
+            if(!targetState.syllabus || typeof targetState.syllabus !== "object") targetState.syllabus = {};
+            if(rec.deleted) delete targetState.syllabus[id]; else targetState.syllabus[id] = { done: !!(data && data.done), notes: String((data && data.notes) || "") };
+            return true;
+    }
+    return false;
+}
+
 const SyncManager = {
     state: 'local_saved',
-    metadata: readJSON(STORAGE.syncData, { lastSyncTime: null }),
-    syncTimer: null,
-    cloudVersion: null,
-    cloudTimestamp: null,
-    forceOverwrite: false,
     hasUnsyncedChanges: false,
+    lastSummary: null,
+    AUTO_DELAY: 4000,          // auto-sync this long after the last edit
+    _busy: false,              // one request chain at a time
+    _rerun: false,             // an edit arrived mid-sync -> sync again afterwards
+    _timer: null,
+    _retries: 0,
+    _verified: false,
+    _manual: false,
+    _massWarned: false,
+    _lastRun: 0,
+    _deferRefresh: false,
 
     updateUI() {
         const dot = document.getElementById("syncDot");
         const text = document.getElementById("syncText");
         const time = document.getElementById("syncTime");
-
-        dot.className = `sync-dot ${this.state}`;
-
-        if(!navigator.onLine) this.state = 'offline';
-
-        if(this.state === 'synced') {
-            text.textContent = "Cloud Synced";
-            this.hasUnsyncedChanges = false;
-        } else if(this.state === 'saving') {
-            text.textContent = "Syncing...";
-        } else if(this.state === 'offline') {
-            text.textContent = "Offline - Queued";
-        } else if(this.state === 'local_saved' || this.hasUnsyncedChanges) {
-            text.textContent = "Local Saved (Pending)";
-            dot.className = `sync-dot local_saved`;
+        const btn = document.getElementById("syncBtn");
+        if(!dot || !text || !time) return;
+        if(!navigator.onLine && this.state !== 'saving') this.state = 'offline';
+        const pending = this.hasUnsyncedChanges;
+        const st = loadSyncState();
+        let cls, label;
+        if(this.state === 'saving'){ cls = 'saving'; label = 'Syncing...'; }
+        else if(this.state === 'offline'){ cls = 'offline'; label = pending ? 'Offline - changes saved' : 'Offline'; }
+        else if(this.state === 'error'){ cls = 'error'; label = 'Sync error'; }
+        else if(pending){ cls = 'local_saved'; label = 'Changes pending'; }
+        else { cls = 'synced'; label = st.lastSyncTime ? 'Cloud synced' : 'Not synced yet'; }
+        dot.className = `sync-dot ${cls}`;
+        text.textContent = label;
+        if(st.lastSyncTime){
+            const d = new Date(st.lastSyncTime);
+            let t = `Last sync: ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+            if(this.lastSummary && (this.lastSummary.sent || this.lastSummary.recv)) t += ` · ${this.lastSummary.sent} sent, ${this.lastSummary.recv} received`;
+            time.textContent = t;
         } else {
-            text.textContent = "Sync Error";
+            time.textContent = "Last sync: Never";
         }
-
-        if(this.metadata.lastSyncTime) {
-            const d = new Date(this.metadata.lastSyncTime);
-            time.textContent = `Last sync: ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
-        }
+        if(btn) btn.textContent = (pending && this.state !== 'saving') ? "Sync All ●" : "Sync All";
     },
 
+    schedule(delay) {
+        clearTimeout(this._timer);
+        this._timer = setTimeout(() => { this._timer = null; this.performSync(); }, delay);
+    },
+
+    // Called on every edit: restarts the wait, so a burst of typing produces ONE sync.
     queueSync() {
-        if(this.syncTimer) clearTimeout(this.syncTimer);
-        this.state = 'local_saved';
+        if(this.state !== 'saving') this.state = 'local_saved';
         this.hasUnsyncedChanges = true;
         this.updateUI();
+        this.schedule(this.AUTO_DELAY);
     },
 
+    // Manual "Sync All": cancel the wait and sync now.
     forceSync() {
-        if(this.syncTimer) clearTimeout(this.syncTimer);
-        this.state = 'saving';
-        this.updateUI();
+        clearTimeout(this._timer);
+        this._timer = null;
+        this._manual = true;
+        this._retries = 0;
         this.performSync();
     },
 
-    async performSync() {
-        if(!navigator.onLine) {
-            this.state = 'offline';
-            this.updateUI();
-            return;
-        }
+    // Is anything on this device not in the Sheet yet?
+    checkPending() {
+        const st = loadSyncState();
+        const local = buildLocalRecords();
+        let pending = false;
+        for(const key in local){ const p = st.recs[key]; if(!p || p.deleted || p.hash !== local[key].hash){ pending = true; break; } }
+        if(!pending) for(const key in st.recs){ if(!local[key] && !st.recs[key].deleted){ pending = true; break; } }
+        this.hasUnsyncedChanges = pending;
+        this.updateUI();
+        return pending;
+    },
 
+    // Only one sync at a time; overlapping calls merge into one follow-up.
+    async performSync() {
+        if(this._busy) { this._rerun = true; return; }
+        this._busy = true;
+        this._lastRun = Date.now();
         try {
-            let payload = { global: targetState };
-            for(let i=0; i<localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if(key.startsWith(STORAGE.dayPrefix)) {
-                    const dateKey = key.substring(STORAGE.dayPrefix.length);
-                    payload[dateKey] = JSON.parse(localStorage.getItem(key));
+            await this._performSyncOnce();
+        } finally {
+            this._busy = false;
+            if(this._rerun) { this._rerun = false; this.queueSync(); }
+        }
+    },
+
+    async _post(body) {
+        const resp = await fetch(getSyncUrl(), { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(body) });
+        if(!resp.ok) throw new Error("HTTP " + resp.status);
+        let res;
+        try { res = await resp.json(); } catch { throw new Error("Bad response from the script"); }
+        if(res && res.status === 'busy') throw new Error("Sheet is busy");
+        if(res && res.status === 'error'){
+            const e = new Error(res.message || "Script error");
+            if(res.code === 'unauthorized'){ e.fatal = true; e.userMessage = "Sync stopped: the secret token in the website and the Apps Script don't match."; }
+            else if(res.code === 'server_error'){ e.userMessage = "The Sheet script reported an error: " + (res.message || "unknown"); }
+            throw e;
+        }
+        if(!res || res.version !== 2 || res.status !== 'ok'){
+            const e = new Error("Old script");
+            e.fatal = true;
+            e.userMessage = "Sync stopped: the Google Apps Script is not the new version yet. Replace its code and redeploy.";
+            throw e;
+        }
+        return res;
+    },
+
+    // Refuse to talk to an old script (it would not understand the new messages).
+    async _verifyServer() {
+        if(this._verified) return;
+        const resp = await fetch(getSyncUrl(), { method: "GET" });
+        if(!resp.ok) throw new Error("HTTP " + resp.status);
+        let j = null;
+        try { j = await resp.json(); } catch { j = null; }
+        if(!j || j.service !== 'execution-protocol-sync' || j.version !== 2){
+            const e = new Error("Old script");
+            e.fatal = true;
+            e.userMessage = "Sync stopped: the Google Apps Script is not the new version yet. Replace its code and redeploy.";
+            throw e;
+        }
+        this._verified = true;
+    },
+
+    _stamp(rec, first) {
+        if(rec.type === 'day'){ const lm = Number(rec.obj && rec.obj._lastModified) || 0; if(lm) return lm; }
+        return first ? 0 : Date.now();
+    },
+
+    // Apply one record received from the Sheet. Returns 1 if this device's data changed.
+    _applyRemote(r, localNow, st, sentHash) {
+        const key = r.key, cur = localNow[key], prev = st.recs[key];
+        const rHash = r.deleted ? '' : hashStr(r.payload);
+        const meta = { hash: rHash, seq: r.seq, updatedAt: r.updatedAt, deleted: !!r.deleted };
+        if(!r.deleted && cur && cur.hash === rHash){ st.recs[key] = meta; return 0; }
+        if(r.deleted && !cur){ st.recs[key] = meta; return 0; }
+        // Was this record edited on this device while the request was in flight? Then keep the local edit.
+        let edited;
+        if(sentHash !== undefined) edited = cur ? cur.hash !== sentHash : sentHash !== '';
+        else edited = cur ? (!prev || prev.deleted || prev.hash !== cur.hash) : !!(prev && !prev.deleted);
+        if(edited){
+            st.recs[key] = { hash: prev ? prev.hash : '', seq: prev ? prev.seq : 0, updatedAt: prev ? prev.updatedAt : 0, deleted: prev ? !!prev.deleted : true };
+            return 0;
+        }
+        const changed = applyRecordLocal(r);
+        st.recs[key] = meta;
+        return changed ? 1 : 0;
+    },
+
+    _afterRemoteApply() {
+        try {
+            rebuildTestSchedule();
+            saveTargets({ silent: true });
+            const ae = document.activeElement;
+            const typing = ae && /^(TEXTAREA|INPUT)$/.test(ae.tagName) && !ae.closest('.modal');
+            if(typing) { this._deferRefresh = true; return; }
+            refreshActiveViews();
+            updateLiveMetrics();
+        } catch(e) { console.error("Refresh after sync failed", e); }
+    },
+
+    async _performSyncOnce() {
+        const manual = this._manual;
+        this._manual = false;
+        if(!navigator.onLine){ this.state = 'offline'; this.updateUI(); return; }
+        this.state = 'saving';
+        this.updateUI();
+        this.hasUnsyncedChanges = false;   // an edit made during the sync sets it again
+        let sent = 0, recv = 0;
+        try {
+            await this._verifyServer();
+            const st = loadSyncState();
+            const first = !st.done;
+            const local = buildLocalRecords();
+            const queue = [];
+            for(const key in local){
+                const l = local[key], prev = st.recs[key];
+                if(!prev || prev.deleted || prev.hash !== l.hash) queue.push({ key, type: l.type, label: l.label, payload: l.payload, deleted: false, hash: l.hash, updatedAt: this._stamp(l, first) });
+            }
+            let tombs = 0;
+            for(const key in st.recs){
+                if(!local[key] && !st.recs[key].deleted){
+                    queue.push({ key, type: key.split(":")[0], label: "", payload: "", deleted: true, hash: "", updatedAt: Date.now() });
+                    tombs++;
                 }
             }
-
-            const requestBody = {
-                deviceTime: Date.now(),
-                lastSyncTime: this.metadata.lastSyncTime || 0,
-                forceOverwrite: this.forceOverwrite || false,
-                data: payload
-            };
-
-            const response = await fetch(WEB_APP_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(requestBody)
-            });
-
-            if(!response.ok) throw new Error("Network response was not ok");
-
-            const result = await response.json();
-
-            if(result.status === 'conflict') {
-                this.cloudVersion = result.cloudData;
-                this.cloudTimestamp = result.cloudTimestamp;
-                document.getElementById('conflictModal').style.display = 'grid';
+            // Safety net: a sudden mass deletion is more likely a bug than intent.
+            if(tombs > 25 && !(manual && this._massWarned)){
+                this._massWarned = true;
+                this.hasUnsyncedChanges = true;
                 this.state = 'error';
+                showFlash(`Sync paused: ${tombs} items look deleted. Click Sync All again to confirm.`, true);
+                this.updateUI();
                 return;
             }
 
-            if(result.status === 'success') {
-                this.state = 'synced';
-                this.metadata.lastSyncTime = result.cloudTimestamp;
-                this.forceOverwrite = false;
-                this.hasUnsyncedChanges = false;
-                writeJSON(STORAGE.syncData, this.metadata);
-            }
+            let since = st.lastSeq, more = false;
+            do {
+                const batch = queue.splice(0, SYNC_BATCH);
+                const res = await this._post({
+                    action: 'sync', token: SYNC_TOKEN, since,
+                    changes: batch.map(c => ({ key: c.key, type: c.type, label: c.label, payload: c.payload, deleted: c.deleted, baseSeq: (st.recs[c.key] || {}).seq || 0, updatedAt: c.updatedAt }))
+                });
+                const byKey = {};
+                batch.forEach(c => { byKey[c.key] = c; });
+                (res.applied || []).forEach(a => {
+                    const c = byKey[a.key];
+                    if(!c) return;
+                    st.recs[a.key] = { hash: c.deleted ? '' : c.hash, seq: a.seq, updatedAt: a.updatedAt, deleted: !!c.deleted };
+                    sent++;
+                });
+                const localNow = buildLocalRecords();
+                let touched = false;
+                (res.rejected || []).forEach(r => { const c = byKey[r.key]; if(this._applyRemote(r, localNow, st, c ? c.hash : undefined)){ recv++; touched = true; } });
+                (res.records || []).forEach(r => { if(this._applyRemote(r, localNow, st)){ recv++; touched = true; } });
+                if(touched) this._afterRemoteApply();
+                st.lastSeq = Number(res.nextSince) || st.lastSeq;
+                since = st.lastSeq;
+                more = !!res.more;
+                saveSyncState(st);
+            } while(queue.length || more);
 
+            st.done = true;
+            st.lastSyncTime = Date.now();
+            saveSyncState(st);
+            this.state = 'synced';
+            this._retries = 0;
+            this._massWarned = false;
+            this.lastSummary = { sent, recv };
+            if(manual) showFlash(sent || recv ? `Synced: ${sent} sent, ${recv} received.` : "Already up to date.");
+            else if(recv) showFlash(`Updated from your other device (${recv} items).`);
         } catch(e) {
             console.error("Sync failed:", e);
             this.state = 'error';
-            if(e instanceof TypeError && e.message.includes("fetch")) {
-                 showFlash("Saved locally. Cloud sync unavailable.", true);
-            } else {
-                 showFlash("Sync failed. Data saved locally.", true);
-            }
+            this.hasUnsyncedChanges = true;
+            showFlash(e.userMessage || "Sync failed. Your data is safe in this browser.", true);
+            if(!e.fatal && this._retries < 3){ this._retries++; this.schedule(8000 * this._retries); }
         }
-        this.updateUI();
-    },
-
-    resolveConflict(choice) {
-        document.getElementById('conflictModal').style.display = 'none';
-        if(choice === 'cloud' && this.cloudVersion) {
-            for(const key in this.cloudVersion) {
-                if(key === 'global') {
-                    targetState = Object.assign(loadTargets(), this.cloudVersion[key]);
-                    writeJSON(STORAGE.targets, targetState);
-                } else {
-                    stateCache[key] = this.cloudVersion[key];
-                    writeJSON(STORAGE.dayPrefix+key, this.cloudVersion[key]);
-                }
-            }
-            applyTheme(targetState.theme || "light");
-            refreshActiveViews();
-
-            this.metadata.lastSyncTime = this.cloudTimestamp;
-            writeJSON(STORAGE.syncData, this.metadata);
-            this.state = 'synced';
-            showFlash("Cloud data applied.");
-        } else {
-            showFlash("Local data kept. Overwriting cloud now...");
-            this.forceOverwrite = true;
-            this.forceSync();
-        }
-        this.cloudVersion = null;
         this.updateUI();
     }
 };
 
-window.addEventListener('online', () => SyncManager.updateUI());
+window.addEventListener('online', () => { SyncManager.state = 'local_saved'; SyncManager.updateUI(); SyncManager.schedule(500); });
 window.addEventListener('offline', () => SyncManager.updateUI());
+// Refresh the screen after a sync once the user stops typing (never interrupt typing).
+document.addEventListener('focusout', () => {
+    if(!SyncManager._deferRefresh) return;
+    setTimeout(() => {
+        const ae = document.activeElement;
+        if(ae && /^(TEXTAREA|INPUT)$/.test(ae.tagName) && !ae.closest('.modal')) return;
+        if(!SyncManager._deferRefresh) return;
+        SyncManager._deferRefresh = false;
+        try { refreshActiveViews(); updateLiveMetrics(); } catch(e) { console.error(e); }
+    }, 400);
+});
+// Sync once shortly after opening, and when coming back to the tab.
+setTimeout(() => { try { SyncManager.checkPending(); } catch(e) { console.error(e); } SyncManager.schedule(500); }, 1500);
+document.addEventListener('visibilitychange', () => {
+    if(!document.hidden && Date.now() - SyncManager._lastRun > 30000 && !SyncManager._busy) SyncManager.schedule(500);
+});
 
 // --- Backup & Restore ---
 function exportData(prefix = "AceGenie_Backup") {
@@ -1724,7 +2015,8 @@ function confirmRestore() {
     exportData("AutoBackup_BeforeRestore");
     for(const key in pendingRestoreData) {
         if(key === 'global') {
-            targetState = Object.assign(loadTargets(), pendingRestoreData[key]);
+            targetState = normalizeTargets(Object.assign({}, loadTargets(), pendingRestoreData[key]));
+            rebuildTestSchedule();
             writeJSON(STORAGE.targets, targetState);
         } else if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
             stateCache[key] = pendingRestoreData[key];
@@ -1743,7 +2035,7 @@ function confirmRestore() {
 let currentView = 'cockpit';
 function switchMainView(view) {
     currentView = view;
-    ['cockpit', 'planner', 'goals', 'syllabus', 'calendar', 'momentum'].forEach(v => {
+    ['cockpit', 'planner', 'goals', 'syllabus', 'chapters', 'calendar', 'momentum'].forEach(v => {
         const btn = document.getElementById(`tab-${v}`);
         if(btn) btn.classList.toggle('active', v === view);
         const sec = document.getElementById(`view-${v}`);
@@ -1758,6 +2050,7 @@ function refreshActiveViews() {
     if(currentView === 'planner') Planner.render();
     if(currentView === 'goals') GoalsManager.render();
     if(currentView === 'syllabus') SyllabusHub.render();
+    if(currentView === 'chapters') SyllabusTracker.render();
     if(currentView === 'calendar') Calendar.render();
     if(currentView === 'momentum') Momentum.render();
 }
@@ -1881,6 +2174,13 @@ const Cockpit = {
     },
     saveDiary(val) {
         persistField(this.activeDate, 'diary', val);
+        this.updateWordCount(val);
+    },
+    updateWordCount(val) {
+        const el = document.getElementById('diaryWordTag');
+        if(!el) return;
+        const n = String(val || '').trim().split(/\s+/).filter(Boolean).length;
+        el.textContent = n + (n === 1 ? ' word' : ' words');
     },
     addDayTodo() {
         const el = document.getElementById('cockpitTodoInput');
@@ -1913,6 +2213,7 @@ const Cockpit = {
         document.getElementById('cockpitQsTarget').textContent = targetState.qs;
         document.getElementById('cockpitHoursTarget').textContent = targetState.hours;
         document.getElementById('cockpitDiaryArea').value = day.diary ?? "";
+        this.updateWordCount(day.diary);
 
         const inboxList = document.getElementById('inboxListContainer');
         document.getElementById('inboxCountBadge').textContent = `${targetState.inbox.length} items`;
@@ -1934,6 +2235,7 @@ const Cockpit = {
         }
 
         document.getElementById('cockpitTestsWrap').innerHTML = renderTests(key, day);
+        document.getElementById('cockpitHomeworkWrap').innerHTML = renderHomework(key);
 
         const todos = day.todos || [];
         const doneCount = todos.filter(t => t.done).length;
@@ -1948,37 +2250,6 @@ const Cockpit = {
                 <button class="todo-delete" data-todo-delete="${key}:${ii}">×</button>
             </div>
         `).join("") || `<div class="small-note todo-empty">No tasks scheduled for this day yet.</div>`;
-
-        const hours = [];
-        for(let h = 6; h <= 22; h++) hours.push(`${pad(h)}:00`);
-        const tests = TEST_SCHEDULE[key] || [];
-        const tbContainer = document.getElementById('cockpitTimeblockList');
-        tbContainer.innerHTML = hours.map(hr => {
-            const prefix = hr.slice(0, 2);
-            const matchingTodos = todos.filter(t => {
-                const m = t.text.match(/@(\d{1,2})(?::(\d{2}))?/);
-                return m && pad(Number(m[1])) === prefix;
-            });
-            const isTestSlot = hr === "09:00" && tests.length > 0;
-            let contentHtml = "";
-            if(isTestSlot) {
-                tests.forEach(t => {
-                    contentHtml += `<div class="timeblock-event test-block"><span>📝 ${esc(t.name)} Exam Slot</span><span style="font-family:var(--mono);font-size:10px;">09:00 - 12:00</span></div>`;
-                });
-            }
-            matchingTodos.forEach(t => {
-                contentHtml += `<div class="timeblock-event" style="${t.done ? 'opacity:0.5;text-decoration:line-through;' : ''}"><span>${esc(t.text)}</span></div>`;
-            });
-            if(!contentHtml) {
-                contentHtml = `<div onclick="Cockpit.promptSlotTask('${hr}')" style="color:var(--text-faint); font-size:11px; font-family:var(--mono); cursor:pointer; padding:4px 8px; border-radius:4px;">+ Click to schedule @${hr}</div>`;
-            }
-            return `
-                <div class="timeblock-slot">
-                    <div class="timeblock-hour">${hr}</div>
-                    <div style="display:flex; flex-direction:column; gap:4px;">${contentHtml}</div>
-                </div>
-            `;
-        }).join("");
 
         updateCockpitRings();
         updateNowLine();
@@ -2386,6 +2657,54 @@ const SyllabusHub = {
         });
         this.render();
     },
+    editingId: null,
+    openModal(id = null) {
+        this.editingId = id;
+        const t = id ? (targetState.tests || []).find(x => x.id === id) : null;
+        document.getElementById('testModalHeading').textContent = t ? 'EDIT TEST' : 'SCHEDULE TEST';
+        document.getElementById('testNameInput').value = t ? t.name : '';
+        document.getElementById('testDateInput').value = t ? t.date : (currentView === 'cockpit' ? Cockpit.activeDate : getIndiaToday());
+        document.getElementById('testSyllabusInput').value = t ? (t.syllabus || '') : '';
+        document.getElementById('testDeleteBtn').style.display = t ? 'inline-flex' : 'none';
+        document.getElementById('testModal').style.display = 'grid';
+        setTimeout(() => document.getElementById('testNameInput').focus(), 30);
+    },
+    closeModal() {
+        document.getElementById('testModal').style.display = 'none';
+        this.editingId = null;
+    },
+    saveTest() {
+        const name = document.getElementById('testNameInput').value.trim();
+        const date = document.getElementById('testDateInput').value;
+        const syllabus = document.getElementById('testSyllabusInput').value.trim();
+        if(!name) { showFlash("Please enter a test name.", true); document.getElementById('testNameInput').focus(); return; }
+        if(!date) { showFlash("Please pick a date.", true); return; }
+        if(!Array.isArray(targetState.tests)) targetState.tests = [];
+        if(this.editingId) {
+            const t = targetState.tests.find(x => x.id === this.editingId);
+            if(t) { t.name = name; t.date = date; t.syllabus = syllabus; }
+            showFlash("Test updated!");
+        } else {
+            targetState.tests.push({ id: uid('test'), name, date, syllabus });
+            showFlash("Test scheduled!");
+        }
+        saveTargets();
+        rebuildTestSchedule();
+        this.closeModal();
+        refreshActiveViews();
+        updateLiveMetrics();
+    },
+    deleteTest(id = this.editingId) {
+        if(!id) return;
+        if(!confirm("Delete this test?")) return;
+        targetState.tests = (targetState.tests || []).filter(x => x.id !== id);
+        saveTargets();
+        rebuildTestSchedule();
+        this.closeModal();
+        refreshActiveViews();
+        updateLiveMetrics();
+        showFlash("Test deleted.");
+    },
     saveNote(testKey, val) {
         targetState.testNotes[testKey] = val;
         saveTargets();
@@ -2394,11 +2713,16 @@ const SyllabusHub = {
     },
     render() {
         const today = getIndiaToday();
-        const sorted = Object.entries(TEST_SCHEDULE).sort((a, b) => a[0].localeCompare(b[0]));
+        const sorted = Object.entries(TEST_SCHEDULE).sort((a, b) => {
+            const ap = a[0] < today, bp = b[0] < today;
+            if(ap !== bp) return ap ? 1 : -1;                       // upcoming first
+            return ap ? b[0].localeCompare(a[0]) : a[0].localeCompare(b[0]);  // soonest first; past: latest first
+        });
         const cards = [];
 
         sorted.forEach(([date, tests]) => {
             if(this.filter === 'UPCOMING' && date < today) return;
+            if(this.filter === 'PAST' && date >= today) return;
             const day = getDay(date);
             const delta = daysBetween(today, date);
 
@@ -2417,10 +2741,14 @@ const SyllabusHub = {
                             <div>
                                 <div class="panel-head">
                                     <span class="test-pill ${subjectClass(t.name)}">${esc(t.name)}</span>
-                                    <span class="today-tag">${delta > 0 ? `In ${delta}d` : delta === 0 ? 'TODAY' : 'PAST'} · ${fmtDate(date)}</span>
+                                    <span style="display:flex; align-items:center; gap:6px;">
+                                        <span class="today-tag">${delta > 0 ? `In ${delta}d` : delta === 0 ? 'TODAY' : 'PAST'} · ${fmtDate(date)}</span>
+                                        <button class="goal-icon-btn" title="Edit test" onclick="SyllabusHub.openModal('${t.id}')">✎</button>
+                                        <button class="goal-icon-btn del" title="Delete test" onclick="SyllabusHub.deleteTest('${t.id}')">🗑</button>
+                                    </span>
                                 </div>
                                 <div style="font-family:var(--mono); font-size:10.5px; color:var(--text-tertiary); margin-bottom:8px;">SYLLABUS TOPICS</div>
-                                <div class="missions" style="margin-bottom:14px;">${renderMissionList(date, t, ti, day)}</div>
+                                <div class="missions" style="margin-bottom:14px;">${t.syllabus ? renderMissionList(date, t, ti, day) : '<div class="small-note">No topics added. Hit ✎ to add some.</div>'}</div>
                             </div>
                             <div>
                                 <div class="priority-label">Exam Strategy / Mock Score &amp; Mistakes</div>
@@ -2432,9 +2760,224 @@ const SyllabusHub = {
             });
         });
 
-        document.getElementById('syllabusCardsContainer').innerHTML = cards.join("");
+        document.getElementById('syllabusCardsContainer').innerHTML = cards.length ? cards.join("") :
+            `<div class="small-note" style="grid-column:1/-1; padding:40px 10px; text-align:center;">No tests here yet. Click <b>+ SCHEDULE TEST</b> to add your first one.</div>`;
     }
 };
+
+const SYLLABUS = {
+    PHY: { label: "Physics", chapters: ["Ray Optics", "Electrostatics", "Units, Dimensions & Measurement", "Current Electricity", "Rotational Motion", "Semiconductor Electronics", "Magnetic Effects of Current", "Wave Optics", "Mechanical Properties of Fluids", "Dual Nature of Radiation & Matter", "Electromagnetic Waves", "Thermodynamics", "Kinetic Theory of Gases", "Capacitance", "Atomic Physics", "Alternating Current", "Gravitation", "Electromagnetic Induction", "Work, Energy & Power", "Nuclear Physics", "Oscillations & Simple Harmonic Motion", "Laws of Motion", "Mechanical Properties of Solids", "Motion in One Dimension", "Waves & Sound", "Motion in Two Dimensions", "Circular Motion", "Experimental Physics", "Thermal Properties of Matter", "Centre of Mass, Momentum & Collision", "Magnetic Properties of Matter", "Mathematical Tools"] },
+    CHEM: { label: "Chemistry", chapters: ["Coordination Compounds", "General Organic Chemistry", "d and f Block Elements", "Chemical Bonding", "Chemical Kinetics", "Structure of Atom", "Hydrocarbons", "Electrochemistry", "Some Basic Concepts of Chemistry", "Thermodynamics", "Biomolecules", "Practical Organic Chemistry", "Amines", "Solutions", "Periodicity of Properties", "Aldehydes & Ketones", "Haloalkanes & Haloarenes", "Chemical Equilibrium", "Alcohols, Phenols & Ethers", "p-Block (Group 15-18)", "Practical Chemistry", "Ionic Equilibrium", "p-Block (Group 13 & 14)", "Isomerism", "Redox Reactions", "Carboxylic Acids & Derivatives"] },
+    MATH: { label: "Mathematics", chapters: ["Three-Dimensional Geometry", "Sequences & Series", "Differential Equations", "Vector Algebra", "Functions", "Definite Integration", "Permutation & Combination", "Probability", "Matrices", "Binomial Theorem", "Area Under Curves", "Quadratic Equations", "Straight Lines", "Complex Numbers", "Sets & Relations", "Circle", "Application of Derivatives", "Determinants", "Statistics", "Ellipse", "Continuity & Differentiability", "Limits", "Parabola", "Hyperbola", "Trigonometric Ratios & Identities", "Inverse Trigonometric Functions", "Indefinite Integration", "Trigonometric Equations", "Differentiation"] }
+};
+
+// --- Homework / Assignments ---
+function renderHomework(key){
+    const items = Homework.forDate(key);
+    if(!items.length) return "";
+    const today = getIndiaToday();
+    return `<div class="priority-label">Homework Due</div><div class="hw-list">${items.map(h => {
+        const subj = HW_SUBJECTS[h.subject] || HW_SUBJECTS.GEN;
+        const late = !h.done && h.due < today;
+        return `<div class="todo-row ${h.done ? "done" : ""}">
+            <input class="tiny-check" type="checkbox" ${h.done ? "checked" : ""} onchange="Homework.toggle('${h.id}')">
+            <div class="todo-content">
+                <div class="todo-text">${esc(h.title)}</div>
+                <div class="todo-tags"><span class="tag ${subj.cls}">${subj.label}</span>${late ? `<span class="tag p-high">Overdue · ${fmtDate(h.due)}</span>` : ""}</div>
+            </div>
+            <button class="goal-icon-btn" title="Edit" onclick="Homework.openModal('${h.id}')">✎</button>
+            <button class="todo-delete" title="Delete" onclick="Homework.remove('${h.id}')">×</button>
+        </div>`;
+    }).join("")}</div>`;
+}
+
+const Homework = {
+    editingId: null,
+    byDate() {
+        const m = {};
+        (targetState.homework || []).forEach(h => { (m[h.due] = m[h.due] || []).push(h); });
+        return m;
+    },
+    forDate(key) {
+        const today = getIndiaToday();
+        return (targetState.homework || []).filter(h => h.due === key || (key === today && h.due < today && !h.done))
+            .sort((a, b) => (a.done - b.done) || a.due.localeCompare(b.due) || a.title.localeCompare(b.title));
+    },
+    changed() {
+        saveTargets();
+        SyncManager.hasUnsyncedChanges = true;
+        SyncManager.queueSync();
+        refreshActiveViews();
+    },
+    openModal(id = null) {
+        this.editingId = id;
+        const h = id ? (targetState.homework || []).find(x => x.id === id) : null;
+        if(id && !h) return;
+        document.getElementById('hwModalHeading').textContent = h ? 'EDIT HOMEWORK' : 'ADD HOMEWORK';
+        document.getElementById('hwTitleInput').value = h ? h.title : '';
+        document.getElementById('hwSubjectInput').value = h ? h.subject : 'PHY';
+        document.getElementById('hwDueInput').value = h ? h.due : (currentView === 'cockpit' ? Cockpit.activeDate : getIndiaToday());
+        document.getElementById('hwDeleteBtn').style.display = h ? 'inline-flex' : 'none';
+        document.getElementById('hwModal').style.display = 'grid';
+        setTimeout(() => document.getElementById('hwTitleInput').focus(), 30);
+    },
+    closeModal() {
+        document.getElementById('hwModal').style.display = 'none';
+        this.editingId = null;
+    },
+    save() {
+        const title = document.getElementById('hwTitleInput').value.trim();
+        const subject = document.getElementById('hwSubjectInput').value;
+        const due = document.getElementById('hwDueInput').value;
+        if(!title) { showFlash("Please enter a title.", true); document.getElementById('hwTitleInput').focus(); return; }
+        if(!due) { showFlash("Please pick a due date.", true); return; }
+        if(!Array.isArray(targetState.homework)) targetState.homework = [];
+        if(this.editingId) {
+            const h = targetState.homework.find(x => x.id === this.editingId);
+            if(h) { h.title = title; h.subject = HW_SUBJECTS[subject] ? subject : 'GEN'; h.due = due; }
+            showFlash("Homework updated!");
+        } else {
+            targetState.homework.push({ id: uid('hw'), title, subject: HW_SUBJECTS[subject] ? subject : 'GEN', due, done: false });
+            showFlash("Homework scheduled!");
+        }
+        this.closeModal();
+        this.changed();
+    },
+    toggle(id) {
+        const h = (targetState.homework || []).find(x => x.id === id);
+        if(!h) return;
+        h.done = !h.done;
+        this.changed();
+    },
+    remove(id = this.editingId) {
+        if(!id) return;
+        if(!confirm("Delete this homework?")) return;
+        targetState.homework = (targetState.homework || []).filter(x => x.id !== id);
+        this.closeModal();
+        this.changed();
+        showFlash("Homework deleted.");
+    }
+};
+
+// --- Syllabus Tracker ---
+const SyllabusTracker = {
+    subject: 'PHY',
+    view: 'all',
+    setView(v) {
+        if(!['all', 'pending', 'done'].includes(v)) return;
+        this.flush();
+        this.view = v;
+        this.render();
+    },
+    _timer: null,
+    _dirty: false,
+    chapterId(subj, i) { return `${subj}:${i + 1}`; },
+    counts(subj) {
+        const total = SYLLABUS[subj].chapters.length;
+        let done = 0;
+        for(let i = 0; i < total; i++) {
+            const e = targetState.syllabus[this.chapterId(subj, i)];
+            if(e && e.done) done++;
+        }
+        return { done, total };
+    },
+    setSubject(s) {
+        if(!SYLLABUS[s]) return;
+        this.flush();
+        this.subject = s;
+        this.render();
+    },
+    _entry(id) {
+        if(!targetState.syllabus || typeof targetState.syllabus !== 'object') targetState.syllabus = {};
+        if(!targetState.syllabus[id]) targetState.syllabus[id] = { done: false, notes: '' };
+        return targetState.syllabus[id];
+    },
+    _prune(id) {
+        const e = targetState.syllabus[id];
+        if(e && !e.done && !e.notes) delete targetState.syllabus[id];
+    },
+    _queue() {
+        this._dirty = true;
+        clearTimeout(this._timer);
+        this._timer = setTimeout(() => this.flush(), 350);
+    },
+    flush() {
+        clearTimeout(this._timer);
+        if(!this._dirty) return;
+        this._dirty = false;
+        saveTargets();
+        SyncManager.hasUnsyncedChanges = true;
+        SyncManager.queueSync();
+    },
+    toggle(id, el) {
+        this._entry(id).done = !!el.checked;
+        this._prune(id);
+        const row = el.closest('tr');
+        if(row) row.classList.toggle('done', !!el.checked);
+        this._queue();
+        this.updateSummary();
+        if(this.view !== 'all') setTimeout(() => { if(currentView === 'chapters') this.render(); }, 250);
+    },
+    setNote(id, val) {
+        this._entry(id).notes = val;
+        this._prune(id);
+        this._queue();
+    },
+    updateSummary() {
+        const subj = this.subject;
+        const c = this.counts(subj);
+        document.getElementById('sylCount').textContent = `${c.done} / ${c.total} done`;
+        document.getElementById('sylBar').style.width = (c.total ? c.done / c.total * 100 : 0) + '%';
+        let allDone = 0, allTotal = 0;
+        Object.keys(SYLLABUS).forEach(k => {
+            const cc = this.counts(k);
+            allDone += cc.done; allTotal += cc.total;
+            const chip = document.querySelector(`.filter-chip[data-sylsubj="${k}"]`);
+            if(chip) {
+                chip.textContent = `${SYLLABUS[k].label} ${cc.done}/${cc.total}`;
+                chip.classList.toggle('active', k === subj);
+            }
+        });
+        document.querySelectorAll('.filter-chip[data-sylview]').forEach(b => b.classList.toggle('active', b.dataset.sylview === this.view));
+        const doneChip = document.querySelector('.filter-chip[data-sylview="done"]');
+        const pendChip = document.querySelector('.filter-chip[data-sylview="pending"]');
+        if(doneChip) doneChip.textContent = `Completed ${c.done}`;
+        if(pendChip) pendChip.textContent = `Pending ${c.total - c.done}`;
+        const pct = allTotal ? Math.round(allDone / allTotal * 100) : 0;
+        document.getElementById('sylOverall').textContent = `Overall: ${allDone} / ${allTotal} chapters covered (${pct}%)`;
+    },
+    render() {
+        const subj = this.subject;
+        const data = SYLLABUS[subj];
+        document.getElementById('sylSubjSub').textContent = data.label.toUpperCase();
+        document.getElementById('sylSubjTitle').textContent = `${data.label} Chapters`;
+        const rowsHtml = data.chapters.map((name, i) => {
+            const id = this.chapterId(subj, i);
+            const e = targetState.syllabus[id] || { done: false, notes: '' };
+            if(this.view === 'done' && !e.done) return '';
+            if(this.view === 'pending' && e.done) return '';
+            return `<tr class="${e.done ? 'done' : ''}">
+                <td><div class="syl-name"><span class="syl-num">${i + 1}</span>${esc(name)}</div></td>
+                <td class="syl-check"><input class="tiny-check" type="checkbox" ${e.done ? 'checked' : ''} onchange="SyllabusTracker.toggle('${id}', this)" aria-label="Mark ${esc(name)} done"></td>
+                <td><textarea rows="1" class="cell-area" placeholder="Notes: what's left, what to practise, weak areas..." oninput="SyllabusTracker.setNote('${id}', this.value)">${esc(e.notes)}</textarea></td>
+            </tr>`;
+        }).join('');
+        document.getElementById('sylTbody').innerHTML = rowsHtml || `<tr><td colspan="3" class="small-note" style="padding:24px 12px; text-align:center;">${this.view === 'done' ? 'No chapters completed yet.' : 'Everything here is complete. Nice work!'}</td></tr>`;
+        document.querySelectorAll('#sylTbody textarea').forEach(autoResize);
+        this.updateSummary();
+    }
+};
+window.addEventListener('beforeunload', (e) => {
+    SyllabusTracker.flush();
+    if(SyncManager.hasUnsyncedChanges || SyncManager._busy) {
+        // Try to send now, and ask the browser to confirm leaving.
+        clearTimeout(SyncManager._timer); SyncManager._timer = null;
+        SyncManager.performSync();
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+document.addEventListener('visibilitychange', () => { if(document.hidden) SyllabusTracker.flush(); });
 
 // --- View 5: Calendar & Agenda ---
 const Calendar = {
@@ -2463,6 +3006,7 @@ const Calendar = {
         const year = this.currentDate.getUTCFullYear();
         const month = this.currentDate.getUTCMonth();
         document.getElementById('calMonthYear').textContent = new Intl.DateTimeFormat('en-US', {month:'long', year:'numeric'}).format(this.currentDate);
+        const hwMap = Homework.byDate();
 
         if (this.mode === 'month') {
             const firstDayJS = new Date(Date.UTC(year, month, 1)).getUTCDay();
@@ -2491,6 +3035,7 @@ const Calendar = {
                 if(TEST_SCHEDULE[dateStr]) {
                     TEST_SCHEDULE[dateStr].forEach(t => { html += `<div class="cal-event-test">${esc(t.name)}</div>`; });
                 }
+                (hwMap[dateStr] || []).forEach(h => { html += `<div class="cal-event-hw ${h.done ? 'done' : ''}" title="${esc(h.title)}">✎ ${esc(h.title)}</div>`; });
 
                 const dayData = getDay(dateStr);
                 if(dayData && dayData.todos && dayData.todos.length > 0) {
@@ -2518,15 +3063,17 @@ const Calendar = {
                 const dateStr = `${year}-${pad(month+1)}-${pad(i)}`;
                 const dayData = getDay(dateStr);
                 const tests = TEST_SCHEDULE[dateStr] || [];
+                const hw = hwMap[dateStr] || [];
                 const todos = (dayData && dayData.todos) ? dayData.todos : [];
 
-                if(tests.length > 0 || todos.length > 0 || (dayData && dayData.diary)) {
+                if(tests.length > 0 || hw.length > 0 || todos.length > 0 || (dayData && dayData.diary)) {
                     hasEvents = true;
                     const dObj = parseKey(dateStr);
                     const weekday = new Intl.DateTimeFormat('en-US', {timeZone:'UTC', weekday:'short'}).format(dObj);
 
                     let eventsHtml = '';
                     tests.forEach(t => eventsHtml += `<div class="cal-event-test">${esc(t.name)}: ${esc(t.syllabus)}</div>`);
+                    hw.forEach(h => eventsHtml += `<div class="cal-event-hw ${h.done ? 'done' : ''}" style="font-size:12px; padding:6px 10px; white-space:normal;">✎ Homework: ${esc(h.title)} (${(HW_SUBJECTS[h.subject] || HW_SUBJECTS.GEN).label})</div>`);
                     todos.forEach(t => eventsHtml += `<div class="cal-event-todo ${t.done?'done':''}" style="font-size:12px; padding:6px 10px;">${esc(t.text)}</div>`);
                     if(dayData && dayData.diary) {
                         eventsHtml += `<div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-style:italic;">📖 ${esc(dayData.diary)}</div>`;
@@ -2544,7 +3091,7 @@ const Calendar = {
                 }
             }
             if(!hasEvents) {
-                agendaContainer.innerHTML = `<div style="text-align:center; padding: 40px; color:var(--text-tertiary); font-family:var(--mono);">No scheduled tasks or tests this month.</div>`;
+                agendaContainer.innerHTML = `<div style="text-align:center; padding: 40px; color:var(--text-tertiary); font-family:var(--mono);">No scheduled tasks, tests or homework this month.</div>`;
             }
         }
     }
@@ -2852,11 +3399,14 @@ const CommandPalette = {
             { label: "◎ Go to Custom Goals Tracker", fn: "switchMainView('goals'); CommandPalette.close();" },
             { label: "➕ Add New Custom Goal Target", fn: "switchMainView('goals'); CommandPalette.close(); GoalsManager.openModal();" },
             { label: "🎯 Go to Tests & Syllabus Tracker", fn: "switchMainView('syllabus'); CommandPalette.close();" },
+            { label: "📚 Go to Syllabus Tracker", fn: "switchMainView('chapters'); CommandPalette.close();" },
+            { label: "📝 Add Homework / Assignment", fn: "CommandPalette.close(); Homework.openModal();" },
+            { label: "➕ Schedule a New Test", fn: "switchMainView('syllabus'); CommandPalette.close(); SyllabusHub.openModal();" },
             { label: "📅 Go to Calendar & Agenda", fn: "switchMainView('calendar'); CommandPalette.close();" },
             { label: "📈 Go to Momentum Area Graphs", fn: "switchMainView('momentum'); CommandPalette.close();" },
             { label: "↻ Rollover Unfinished Tasks from Past 7 Days", fn: "rolloverOverdueTasks(); CommandPalette.close();" },
             { label: "◐ Toggle Light / Dark Studio Theme", fn: "toggleTheme(); CommandPalette.close();" },
-            { label: "☁️ Force Cloud Sync Now", fn: "SyncManager.forceSync(); CommandPalette.close();" }
+            { label: "☁️ Sync All Data", fn: "SyncManager.forceSync(); CommandPalette.close();" }
         ];
 
         actions.filter(a => !q || a.label.toLowerCase().includes(q.toLowerCase())).forEach(a => {
@@ -2964,14 +3514,24 @@ function updateLiveMetrics(){
 
     const jmEl = document.getElementById("jeeMainsDays");
     const qftEl = document.getElementById("qftDays");
+    const upcomingDates = Object.keys(TEST_SCHEDULE).filter(d => d >= today).sort();
     if(jmEl) jmEl.textContent = formatCountdown(daysBetween(today, '2027-01-22'));
-    if(qftEl) qftEl.textContent = formatCountdown(daysBetween(today, '2026-11-29'));
+    if(qftEl) {
+        const qftDates = Object.keys(TEST_SCHEDULE).filter(d => TEST_SCHEDULE[d].some(t => String(t.name).includes('QFT'))).sort();
+        const lbl = document.getElementById("qftLabel");
+        let target = null, label = "Next Test";
+        if(qftDates.length && qftDates[0] >= today) { target = qftDates[0]; label = "QFTs Start"; }
+        else if(qftDates.some(d => d >= today)) { target = qftDates.find(d => d >= today); label = "Next QFT"; }
+        else if(upcomingDates.length) { target = upcomingDates[0]; }
+        if(lbl) lbl.textContent = label;
+        qftEl.textContent = target ? formatCountdown(daysBetween(today, target)) : "—";
+    }
 
     const all=Object.entries(TEST_SCHEDULE).sort((a,b)=>a[0].localeCompare(b[0])), next=all.find(([date])=>date>=today);
     const nN=document.getElementById("nextTestName"), nD=document.getElementById("nextTestDate"), nDays=document.getElementById("nextTestDays");
     if(nN && nD && nDays) {
         if(!next){
-            nN.textContent="Complete";nD.textContent="No future tests";nDays.textContent="—";
+            nN.textContent="No test scheduled";nD.textContent="Add one in the Tests tab";nDays.textContent="—";
             document.getElementById("countdownMissions").innerHTML="";
         } else {
             const [date,tests]=next, delta=daysBetween(today,date);
@@ -3063,8 +3623,9 @@ document.addEventListener("keydown",e=>{
         else if(e.key === "2") switchMainView('planner');
         else if(e.key === "3") switchMainView('goals');
         else if(e.key === "4") switchMainView('syllabus');
-        else if(e.key === "5") switchMainView('calendar');
-        else if(e.key === "6") switchMainView('momentum');
+        else if(e.key === "5") switchMainView('chapters');
+        else if(e.key === "6") switchMainView('calendar');
+        else if(e.key === "7") switchMainView('momentum');
     }
     if(e.key==="Enter"&&!e.shiftKey&&e.target.matches(".todo-input")){
         e.preventDefault();
@@ -3204,26 +3765,7 @@ setInterval(() => { updateWeekRibbon(); if (currentView === 'cockpit') updateNow
 (function () {
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const CARD_SEL = '.panel-card, .goal-card, .goal-stat-card, .remaining-card, .countdown-card, .kanban-col';
-    const MAG_SEL = '.tab-btn, .utility-wrap .action-btn:not(.secondary)';
     const topbar = document.querySelector('.topbar');
-
-    // --- Layered entrance on view change ---
-    function enter(sec) {
-        if (reduce || !sec) return;
-        sec.querySelectorAll(CARD_SEL).forEach((c, i) => c.style.setProperty('--i', Math.min(i, 12)));
-        sec.classList.remove('entering');
-        void sec.offsetWidth;
-        sec.classList.add('entering');
-        clearTimeout(sec._enterTimer);
-        sec._enterTimer = setTimeout(() => sec.classList.remove('entering'), 1500);
-    }
-    const _switchMainView = window.switchMainView;
-    window.switchMainView = function (view) {
-        const same = currentView === view;
-        _switchMainView(view);
-        if (!same) enter(document.getElementById('view-' + view));
-    };
 
     // --- Pencil-draw strike on task completion ---
     const _updateTodo = window.updateTodo;
@@ -3243,7 +3785,6 @@ setInterval(() => { updateWeekRibbon(); if (currentView === 'cockpit') updateNow
     function onScroll() {
         scrollY = window.scrollY || 0;
         if (topbar) topbar.classList.toggle('scrolled', scrollY > 8);
-        if (fine && !reduce) schedule();
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -3296,135 +3837,7 @@ setInterval(() => { updateWeekRibbon(); if (currentView === 'cockpit') updateNow
         }
     });
 
-    // --- Pointer effects (mouse / trackpad only) ---
-    let schedule = function () {};
-    if (fine && !reduce) {
-        let px = -9999, py = -9999, tx = 0, ty = 0, cx = 0, cy = 0;
-        let lastTarget = null, lastCard = null, raf = 0, inside = false;
-        const mags = Array.from(document.querySelectorAll(MAG_SEL));
-        mags.forEach(m => { m.classList.add('magnetic'); m._tx = 0; m._ty = 0; });
-
-        schedule = function () { if (!raf) raf = requestAnimationFrame(frame); };
-
-        window.addEventListener('pointermove', e => {
-            if (e.pointerType === 'touch') return;
-            px = e.clientX; py = e.clientY; inside = true;
-            tx = px / window.innerWidth * 2 - 1;
-            ty = py / window.innerHeight * 2 - 1;
-            lastTarget = e.target;
-            schedule();
-        }, { passive: true });
-        document.documentElement.addEventListener('mouseleave', () => {
-            px = py = -9999; tx = ty = 0; inside = false; lastTarget = null; schedule();
-        });
-
-        // Cache the elements and create empty arrays for measurements outside the animation loop
-        const dotEls = Array.from(document.querySelectorAll('.dot-frame, .pattern-gutter'));
-        const lineEls = Array.from(document.querySelectorAll('.hairline-section, .cal-header'));
-        let dotRects = [], lineRects = [], magRects = [];
-
-        // Create a function that measures the screen ONLY when the layout actually changes
-        function measureLayout() {
-            dotRects = dotEls.map(el => el.getBoundingClientRect());
-            lineRects = lineEls.map(el => el.getBoundingClientRect());
-            magRects = mags.map(m => m.getBoundingClientRect());
-        }
-
-        // Run the measurement once at start, and whenever scrolling or resizing the window
-        measureLayout();
-        window.addEventListener('resize', measureLayout, { passive: true });
-        window.addEventListener('scroll', measureLayout, { passive: true });
-        
-        function frame() {
-            raf = 0;
-            // ---- READ phase ----
-            const card = inside && lastTarget && lastTarget.closest ? lastTarget.closest(CARD_SEL) : null;
-            const cardRect = card ? card.getBoundingClientRect() : null;
-
-            // ---- WRITE phase ----
-            // Card spotlight + tilt
-            if (lastCard && lastCard !== card && lastCard.classList.contains('countdown-card')) {
-                lastCard.classList.remove('tilting');
-                lastCard.style.setProperty('--rx', '0deg');
-                lastCard.style.setProperty('--ry', '0deg');
-            }
-            if (card && cardRect) {
-                const x = px - cardRect.left, y = py - cardRect.top;
-                card.style.setProperty('--mx', x + 'px');
-                card.style.setProperty('--my', y + 'px');
-                if (card.classList.contains('countdown-card')) {
-                    card.classList.add('tilting');
-                    card.style.setProperty('--ry', ((x / cardRect.width - 0.5) * 9).toFixed(2) + 'deg');
-                    card.style.setProperty('--rx', (-(y / cardRect.height - 0.5) * 7).toFixed(2) + 'deg');
-                }
-            }
-            lastCard = card;
-
-            // Parallax telemetry
-            cx += (tx - cx) * 0.09;
-            cy += (ty - cy) * 0.09;
-            const settled = Math.abs(tx - cx) < 0.002 && Math.abs(ty - cy) < 0.002;
-            if (settled) { cx = tx; cy = ty; }
-            document.querySelectorAll('.big-metric, .days, .next-name').forEach(el => {
-                const depth = el.classList.contains('days') ? 9 : el.classList.contains('big-metric') ? 6 : 4;
-                el.style.transform = 'translate3d(' + (cx * depth).toFixed(2) + 'px,' + (cy * depth * 0.7).toFixed(2) + 'px,0)';
-            });
-
-            // Dot grid: drift + spotlight
-            const dx = (-cx * 5).toFixed(2) + 'px';
-            const dyFrame = (-cy * 4 - scrollY * 0.12).toFixed(2) + 'px';
-            const dyGutter = (-cy * 5 - scrollY * 0.5).toFixed(2) + 'px';
-            dotEls.forEach((el, i) => {
-                const r = dotRects[i];
-                const isGutter = el.classList.contains('pattern-gutter');
-                if (!isGutter) el.style.setProperty('--dx', dx);
-                el.style.setProperty('--dy', isGutter ? dyGutter : dyFrame);
-                const near = inside && px > r.left - 160 && px < r.right + 160 && py > r.top - 160 && py < r.bottom + 160;
-                if (near) {
-                    el.style.setProperty('--gx', (px - r.left) + 'px');
-                    el.style.setProperty('--gy', (py - r.top) + 'px');
-                }
-                el.classList.toggle('lit', near);
-            });
-
-            // Hairline ignition
-            lineEls.forEach((el, i) => {
-                const r = lineRects[i];
-                let hx = '-999px';
-                if (inside && r.width > 0) {
-                    if (el.classList.contains('hairline-section')) {
-                        if (Math.min(Math.abs(py - r.top), Math.abs(py - r.bottom)) < 90) hx = (px - r.left + window.innerWidth) + 'px';
-                    } else if (Math.abs(py - r.bottom) < 90) {
-                        hx = (px - r.left) + 'px';
-                    }
-                }
-                el.style.setProperty('--hx', hx);
-            });
-
-            // Magnetic buttons
-            mags.forEach((m, i) => {
-                const r = magRects[i];
-                const mcx = r.left + r.width / 2 - m._tx, mcy = r.top + r.height / 2 - m._ty;
-                const ddx = px - mcx, ddy = py - mcy, dist = Math.hypot(ddx, ddy);
-                let nx = 0, ny = 0;
-                if (inside && dist < 110) {
-                    const pull = 1 - dist / 110;
-                    nx = Math.max(-7, Math.min(7, ddx * 0.32 * pull));
-                    ny = Math.max(-5, Math.min(5, ddy * 0.32 * pull));
-                }
-                if (Math.abs(nx - m._tx) > 0.05 || Math.abs(ny - m._ty) > 0.05) {
-                    m._tx = nx; m._ty = ny;
-                    m.style.setProperty('--tx', nx.toFixed(2) + 'px');
-                    m.style.setProperty('--ty', ny.toFixed(2) + 'px');
-                }
-            });
-
-            if (!settled) schedule();
-        }
-    }
-
     onScroll();
-    enter(document.getElementById('view-cockpit'));
 })();
 </script>
 </body>
