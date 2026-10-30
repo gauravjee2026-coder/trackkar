@@ -1050,6 +1050,7 @@ html[data-theme="dark"] .topbar.scrolled { box-shadow: 0 14px 34px -14px rgba(0,
                         <button class="filter-chip" data-testfilter="QPT" onclick="SyllabusHub.setFilter('QPT')">QPT</button>
                         <button class="filter-chip" data-testfilter="QAPT" onclick="SyllabusHub.setFilter('QAPT')">QAPT</button>
                         <button class="filter-chip" data-testfilter="QFT" onclick="SyllabusHub.setFilter('QFT')">QFT</button>
+                        <button class="filter-chip" data-testfilter="UA" onclick="SyllabusHub.setFilter('UA')">UA</button>
                         <button class="filter-chip" data-testfilter="2026" onclick="SyllabusHub.setFilter('2026')">2026</button>
                         <button class="action-btn" onclick="SyllabusHub.openModal()" style="padding: 8px 16px; font-size: 12.5px; font-weight: 600; margin-left:6px;"><span>+ SCHEDULE TEST</span></button>
                     </div>
@@ -1393,7 +1394,7 @@ const HW_SUBJECTS = { PHY: { label: "Physics", cls: "phy" }, CHEM: { label: "Che
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 // Your original test schedule. Loaded once into the editable test list (Tests tab), then synced like any other data.
-const SEED_VERSION = 1;
+const SEED_VERSION = 2;
 const SEED_TESTS = [
     {"id": "seed_2026-09-06_0", "date": "2026-09-06", "name": "[QPT 7]", "syllabus": "Phy: Mech. Prop. Fluids, Mech. Prop. Solids, Oscillations | Chem: IUPAC Nomenclature, GOC, Isomerism | Math: Matrices, Determinants", "order": 0},
     {"id": "seed_2026-09-13_0", "date": "2026-09-13", "name": "[QPT 8]", "syllabus": "All Chapters from QPT 5 to QPT 7. PYQS JEE Main Prep Check", "order": 0},
@@ -1441,7 +1442,18 @@ const SEED_TESTS = [
     {"id": "seed_2027-01-10_0", "date": "2027-01-10", "name": "[QFT 12]", "syllabus": "JEE Main Full Syllabus", "order": 0},
     {"id": "seed_2027-01-12_0", "date": "2027-01-12", "name": "[QFT 13]", "syllabus": "JEE Main Full Syllabus", "order": 0},
     {"id": "seed_2027-01-14_0", "date": "2027-01-14", "name": "[QFT 14]", "syllabus": "JEE Main Full Syllabus", "order": 0},
-    {"id": "seed_2027-01-15_0", "date": "2027-01-15", "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus", "order": 0}
+    {"id": "seed_2027-01-15_0", "date": "2027-01-15", "name": "[QFT 15]", "syllabus": "JEE Main Full Syllabus", "order": 0},
+    {"id": "ua_test_01", "date": "2026-11-08", "name": "[UA 1]", "syllabus": "Phy: Kinematics, NLM & Friction, Circular Motion, Work Power & Energy, Centre of Mass | Chem: BOC, IUPAC, Isomerism | Math: Matrices & Determinants, Permutations & Combinations", "order": 5},
+    {"id": "ua_test_02", "date": "2026-11-15", "name": "[UA 2]", "syllabus": "Phy: Rotational Mechanics, Fluid Mechanics | Chem: GOC (Electronic Effects Only) | Math: Probability", "order": 5},
+    {"id": "ua_test_03", "date": "2026-11-22", "name": "[UA 3]", "syllabus": "Phy: SHM, Properties of Matter | Chem: GOC & Quantum Numbers & Electronic Configuration, Periodic Properties, Mole Concept | Math: Trigonometry", "order": 5},
+    {"id": "ua_test_04", "date": "2026-11-29", "name": "[UA 4]", "syllabus": "Phy: Waves, Sound | Chem: Hydrocarbons, Chemical Bonding, Redox Reactions, Chemical Equilibrium | Math: Straight Lines & Circles", "order": 5},
+    {"id": "ua_test_05", "date": "2026-12-06", "name": "[UA 5]", "syllabus": "Phy: Thermal Properties | Chem: Benzene & Haloalkanes, Coordination & d Block, Salt Analysis, Chemical Kinetics | Math: Conic Sections, Vectors & 3D Geometry", "order": 5},
+    {"id": "ua_test_06", "date": "2026-12-13", "name": "[UA 6]", "syllabus": "Phy: Thermodynamics, Electrostatics | Chem: APE, p Block, Thermodynamics | Math: Quadratic Equations", "order": 5},
+    {"id": "ua_test_07", "date": "2026-12-20", "name": "[UA 7]", "syllabus": "JEE Main Full Syllabus", "order": 5},
+    {"id": "ua_test_08", "date": "2026-12-27", "name": "[UA 8]", "syllabus": "JEE Main Full Syllabus", "order": 5},
+    {"id": "ua_test_09", "date": "2027-01-03", "name": "[UA 9]", "syllabus": "JEE Main Full Syllabus", "order": 5},
+    {"id": "ua_test_10", "date": "2027-01-10", "name": "[UA 10]", "syllabus": "JEE Main Full Syllabus", "order": 5},
+    {"id": "ua_test_11", "date": "2027-01-17", "name": "[UA 11]", "syllabus": "JEE Main Full Syllabus", "order": 5}
 ];
 let targetState = loadTargets();
 (function seedTestsOnce(){
@@ -2728,6 +2740,7 @@ const SyllabusHub = {
 
             tests.forEach((t, ti) => {
                 if(this.filter === 'QPT' && !t.name.includes('QPT')) return;
+                if(this.filter === 'UA' && !t.name.includes('UA')) return;
                 if(this.filter === 'QAPT' && !t.name.includes('QAPT')) return;
                 if(this.filter === 'QFT' && !t.name.includes('QFT')) return;
                 if(this.filter === '2026' && !t.name.includes('2026')) return;
